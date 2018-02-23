@@ -1,0 +1,701 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="web安全,xss," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1、XSS的原理1.1、定义XSS 全称 Cross Site Scripting ，跨站脚本攻击。恶意攻击者往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中的Script代码会被执行，从而达到窃取信息，植入广告等恶意攻击用户的目的。 1.2、网站交互示意图 1.3、攻击原理XSS Fuzzing（模糊测试）是挖掘漏洞最常用的手段之一。通俗可以把这种方式理解为不断尝试的过程。">
+<meta name="keywords" content="web安全,xss">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Web安全-xss">
+<meta property="og:url" content="https://wsfe.github.io/2017/08/web-xss/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="1、XSS的原理1.1、定义XSS 全称 Cross Site Scripting ，跨站脚本攻击。恶意攻击者往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中的Script代码会被执行，从而达到窃取信息，植入广告等恶意攻击用户的目的。 1.2、网站交互示意图 1.3、攻击原理XSS Fuzzing（模糊测试）是挖掘漏洞最常用的手段之一。通俗可以把这种方式理解为不断尝试的过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://i.imgur.com/elBNQ7n.png">
+<meta property="og:image" content="http://i.imgur.com/zlrRbaj.png">
+<meta property="og:image" content="http://i.imgur.com/XLfTokd.png">
+<meta property="og:updated_time" content="2018-02-22T03:38:44.150Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Web安全-xss">
+<meta name="twitter:description" content="1、XSS的原理1.1、定义XSS 全称 Cross Site Scripting ，跨站脚本攻击。恶意攻击者往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中的Script代码会被执行，从而达到窃取信息，植入广告等恶意攻击用户的目的。 1.2、网站交互示意图 1.3、攻击原理XSS Fuzzing（模糊测试）是挖掘漏洞最常用的手段之一。通俗可以把这种方式理解为不断尝试的过程。">
+<meta name="twitter:image" content="http://i.imgur.com/elBNQ7n.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2017/08/web-xss/"/>
+
+
+
+
+
+  <title>Web安全-xss | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2017/08/web-xss/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Web安全-xss</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-08T10:28:24+08:00">
+                2017-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1、XSS的原理"><a href="#1、XSS的原理" class="headerlink" title="1、XSS的原理"></a>1、XSS的原理</h2><h3 id="1-1、定义"><a href="#1-1、定义" class="headerlink" title="1.1、定义"></a>1.1、定义</h3><p>XSS 全称 Cross Site Scripting ，跨站脚本攻击。恶意攻击者往Web页面里插入恶意Script代码，当用户浏览该页之时，嵌入其中的Script代码会被执行，从而达到窃取信息，植入广告等恶意攻击用户的目的。</p>
+<h3 id="1-2、网站交互示意图"><a href="#1-2、网站交互示意图" class="headerlink" title="1.2、网站交互示意图"></a>1.2、网站交互示意图</h3><p><img src="http://i.imgur.com/elBNQ7n.png" alt="交互"></p>
+<h3 id="1-3、攻击原理"><a href="#1-3、攻击原理" class="headerlink" title="1.3、攻击原理"></a>1.3、攻击原理</h3><p>XSS Fuzzing（模糊测试）是挖掘漏洞最常用的手段之一。通俗可以把这种方式理解为不断尝试的过程。<br><img src="http://i.imgur.com/zlrRbaj.png" alt="原理"></p>
+<a id="more"></a>
+<h2 id="2、XSS攻击类型"><a href="#2、XSS攻击类型" class="headerlink" title="2、XSS攻击类型"></a>2、XSS攻击类型</h2><h3 id="2-1、反射型"><a href="#2-1、反射型" class="headerlink" title="2.1、反射型"></a>2.1、反射型</h3><p>非持久型xss攻击是一次性的，仅对当次的页面访问产生影响。<br>用户访问访问一个被攻击者篡改后的链接时，被植入的攻击脚本被用户游览器执行，从而达到攻击目的。（一般容易出现在搜索页面，评论页面）</p>
+<p> 有几个小列子：</p>
+<pre><code>/?myxss=&lt;img  src=&quot;null“  onerror=&quot;alert(1);&quot;/&gt;
+
+/?myxss=&lt;img src=&quot;null“ onerror=&quot;alert(document.cookie);&quot;/&gt;
+</code></pre><h3 id="2-1、存储型"><a href="#2-1、存储型" class="headerlink" title="2.1、存储型"></a>2.1、存储型</h3><p>存储型XSS，是持久化的，代码存储在服务端（数据库，内存，文件系统）中，攻击行为将伴随着攻击数据一直存在。<br>在个人信息或发表文章等地方，加入代码，如果没有过滤或过滤不严，那么这些代码将储存到服务器中，用户访问该页面的时候触发代码执行。这种XSS比较危险，容易造成蠕虫，盗窃cookie。</p>
+<h2 id="3、XSS的防御"><a href="#3、XSS的防御" class="headerlink" title="3、XSS的防御"></a>3、XSS的防御</h2><h3 id="3-1、编码"><a href="#3-1、编码" class="headerlink" title="3.1、编码"></a>3.1、编码</h3><p>对用户输入的数据进行HTML Entity编码。</p>
+<p><img src="http://i.imgur.com/XLfTokd.png" alt=""></p>
+<p>可以参考w3c文档：<a href="https://www.w3.org/wiki/Common_HTML_entities_used_for_typography" target="_blank" rel="noopener">https://www.w3.org/wiki/Common_HTML_entities_used_for_typography</a></p>
+<h3 id="3-2、过滤"><a href="#3-2、过滤" class="headerlink" title="3.2、过滤"></a>3.2、过滤</h3><p>移除用户上传的DOM属性，如onerror，onclick等。<br>移除用户上传的style,script,iframe节点。</p>
+<p>根据白名单过滤HTML：<a href="https://github.com/leizongmin/js-xss" target="_blank" rel="noopener">https://github.com/leizongmin/js-xss</a></p>
+<h3 id="3-2、较正"><a href="#3-2、较正" class="headerlink" title="3.2、较正"></a>3.2、较正</h3><p>避免直接对HTML Entity解码。<br>使用DOMParse转换，校正不配对的DOM标签</p>
+<h2 id="4、测试Demo"><a href="#4、测试Demo" class="headerlink" title="4、测试Demo"></a>4、测试Demo</h2><p><a href="https://github.com/wjxdem/xss" target="_blank" rel="noopener">https://github.com/wjxdem/xss</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/web安全/" rel="tag"># web安全</a>
+          
+            <a href="/tags/xss/" rel="tag"># xss</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/closure/" rel="prev" title="闭包">
+                闭包 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、XSS的原理"><span class="nav-number">1.</span> <span class="nav-text">1、XSS的原理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1、定义"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2、网站交互示意图"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、网站交互示意图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3、攻击原理"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、攻击原理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、XSS攻击类型"><span class="nav-number">2.</span> <span class="nav-text">2、XSS攻击类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1、反射型"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、反射型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1、存储型"><span class="nav-number">2.2.</span> <span class="nav-text">2.1、存储型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、XSS的防御"><span class="nav-number">3.</span> <span class="nav-text">3、XSS的防御</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1、编码"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2、过滤"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、过滤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2、较正"><span class="nav-number">3.3.</span> <span class="nav-text">3.2、较正</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、测试Demo"><span class="nav-number">4.</span> <span class="nav-text">4、测试Demo</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

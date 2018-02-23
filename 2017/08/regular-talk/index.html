@@ -1,0 +1,913 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js,正则," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="正则浅谈写在前面&amp;ensp;&amp;ensp;最近工作中经常需要使用正则做字符串校验或片段提取。过去常常是百度一下，略作修改就用在项目中。近来尝试自己写正则表达式，发现正则语法已经忘记得七零八落，许多基础语法混淆不清，遇到复杂的正则更是抓瞎。不得已，将正则语法重新复习了一遍，又有新的收获。温故而知新，与君共勉。 什么是正则&amp;ensp;&amp;ensp;回忆一下，通常情况下我们是如何表述一个字符串的：  &amp;en">
+<meta name="keywords" content="js,正则">
+<meta property="og:type" content="article">
+<meta property="og:title" content="正则浅谈">
+<meta property="og:url" content="https://wsfe.github.io/2017/08/regular-talk/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="正则浅谈写在前面&amp;ensp;&amp;ensp;最近工作中经常需要使用正则做字符串校验或片段提取。过去常常是百度一下，略作修改就用在项目中。近来尝试自己写正则表达式，发现正则语法已经忘记得七零八落，许多基础语法混淆不清，遇到复杂的正则更是抓瞎。不得已，将正则语法重新复习了一遍，又有新的收获。温故而知新，与君共勉。 什么是正则&amp;ensp;&amp;ensp;回忆一下，通常情况下我们是如何表述一个字符串的：  &amp;en">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-22T03:38:44.149Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="正则浅谈">
+<meta name="twitter:description" content="正则浅谈写在前面&amp;ensp;&amp;ensp;最近工作中经常需要使用正则做字符串校验或片段提取。过去常常是百度一下，略作修改就用在项目中。近来尝试自己写正则表达式，发现正则语法已经忘记得七零八落，许多基础语法混淆不清，遇到复杂的正则更是抓瞎。不得已，将正则语法重新复习了一遍，又有新的收获。温故而知新，与君共勉。 什么是正则&amp;ensp;&amp;ensp;回忆一下，通常情况下我们是如何表述一个字符串的：  &amp;en">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2017/08/regular-talk/"/>
+
+
+
+
+
+  <title>正则浅谈 | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2017/08/regular-talk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">正则浅谈</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-15T11:16:43+08:00">
+                2017-08-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="正则浅谈"><a href="#正则浅谈" class="headerlink" title="正则浅谈"></a>正则浅谈</h2><h4 id="写在前面"><a href="#写在前面" class="headerlink" title="写在前面"></a>写在前面</h4><p>&ensp;&ensp;最近工作中经常需要使用正则做字符串校验或片段提取。过去常常是百度一下，略作修改就用在项目中。近来尝试自己写正则表达式，发现正则语法已经忘记得七零八落，许多基础语法混淆不清，遇到复杂的正则更是抓瞎。不得已，将正则语法重新复习了一遍，又有新的收获。温故而知新，与君共勉。</p>
+<h4 id="什么是正则"><a href="#什么是正则" class="headerlink" title="什么是正则"></a>什么是正则</h4><p>&ensp;&ensp;回忆一下，通常情况下我们是如何表述一个字符串的：<br>  &ensp;&ensp;&ensp;&ensp;以 “010 开头的电话号码”, “夹在HTML 的 和 中间的内容”, “含有 hello 的字符串”, “负数”, “IP地址”<br>&ensp;&ensp;显而易见，对于这些描述字符串的自然语言计算机是无法理解的。<br>&ensp;&ensp;而正则表达式是一种人和计算机都能轻松处理的约定, 用来描述一类具有某个性质的字符串。确切而言： <strong>正则表达式是一种描述性的语言, 用来概括一类字符串 (或者说一个字符串集合)</strong>。当我们定义了某一个正则表达式，其实也就确定了这个正则表达式描述的所有字符串集合。<br>  　　下列是几个最简单的正则表达式：<br>&ensp;&ensp;&ensp;&ensp; <code>abc</code><br> &ensp;&ensp;&ensp;&ensp;<code>\\d</code><br> &ensp;&ensp;&ensp;&ensp;<code>\d[abc]</code></p>
+ <a id="more"></a>
+<h4 id="正则基础语法"><a href="#正则基础语法" class="headerlink" title="正则基础语法"></a>正则基础语法</h4><p>&ensp;&ensp;正则基础语法简单而言就是符号匹配和位置匹配。符号匹配使得人可以以某几种简单的字符或字符组合描述一个字符串，位置匹配使得人可以以简单的语法描述字符串中的某个特定位置。<br>&ensp;&ensp;基本上掌握了字符匹配和位置匹配的语法，正则表达式也就八九不离十了。<br>&ensp;&ensp;下面是对正则语法的一些简单归纳：</p>
+<h5 id="符号匹配："><a href="#符号匹配：" class="headerlink" title="符号匹配："></a>符号匹配：</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">字符</th>
+<th style="text-align:left">含义</th>
+<th style="text-align:left">示例</th>
+<th style="text-align:left">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">普通字符</td>
+<td style="text-align:left">匹配单个字符</td>
+<td style="text-align:left">/^abc$/.test(‘abc’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\d</td>
+<td style="text-align:left">匹配一个数字字符。等价于 [0-9]。</td>
+<td style="text-align:left">/^\d\d\d$/.test(‘123’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\D</td>
+<td style="text-align:left">匹配一个非数字字符。等价于 [^0-9]。</td>
+<td style="text-align:left">/^\D\D\D$/.test(‘abc’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\w</td>
+<td style="text-align:left">匹配包括下划线的任何单词字符。等价于’[A-Za-z0-9_]’。</td>
+<td style="text-align:left">/^\w\w\w$/.test(‘1a_’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\W</td>
+<td style="text-align:left">匹配任何非单词字符。等价于 ‘[^A-Za-z0-9_]’。</td>
+<td style="text-align:left">/^\W\W\W$/.test(‘!@#’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\s</td>
+<td style="text-align:left">空白字符，包括空格、制表符、换页符等。等价于 [ \f\n\r\t\v]。</td>
+<td style="text-align:left">/^\sabc$/.test(‘ abc’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\S</td>
+<td style="text-align:left">匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">\t\r\n\v\f</td>
+<td style="text-align:left">tab 回车 换行 垂直制表符 翻页符</td>
+<td style="text-align:left"></td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">^</td>
+<td style="text-align:left">匹配单个位置时，表示取非 [^\w]</td>
+<td style="text-align:left">/^[^\d]abc$/.test(‘aabc’)</td>
+<td style="text-align:left">True</td>
+</tr>
+</tbody>
+</table>
+<h5 id="量词："><a href="#量词：" class="headerlink" title="量词："></a>量词：</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">字符</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">示例</th>
+<th style="text-align:left">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">{n}</td>
+<td style="text-align:left">n 是一个非负整数。匹配确定的 n 次。</td>
+<td style="text-align:left">/^\d{3}$/.test(‘123’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">{n,}</td>
+<td style="text-align:left">n 是一个非负整数。至少匹配n 次。</td>
+<td style="text-align:left">/^\d{3,}$/.test(‘123’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">{n,m}</td>
+<td style="text-align:left">m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m 次。</td>
+<td style="text-align:left">/^\d{1,3}$/.test(‘123’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">*</td>
+<td style="text-align:left">匹配前面的子表达式零次或多次。等价于{0,}。</td>
+<td style="text-align:left">/^\d*$/.test(‘123’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">+</td>
+<td style="text-align:left">匹配前面的子表达式一次或多次。等价于 {1,}。</td>
+<td style="text-align:left">/^\d+$/.test(‘123’)</td>
+<td style="text-align:left">True</td>
+</tr>
+<tr>
+<td style="text-align:left">?</td>
+<td style="text-align:left">匹配前面的子表达式零次或一次。 等价于 {0,1}。</td>
+<td style="text-align:left">/^\d?$/.test(‘123’)</td>
+<td style="text-align:left">False</td>
+</tr>
+</tbody>
+</table>
+<h5 id="贪婪模式与非贪婪模式"><a href="#贪婪模式与非贪婪模式" class="headerlink" title="贪婪模式与非贪婪模式"></a>贪婪模式与非贪婪模式</h5><p>&ensp;&ensp;说到量词就不得不提起正则表达式的贪婪模式以及非贪婪模式。贪婪模式在整个表达式匹配成功的情况下尽可能多的匹配字符；非贪婪模式在整个表达式匹配成功的前提下，尽可能少的匹配字符；</p>
+<p>&ensp;&ensp;说到底： 正则贪婪与非贪婪模式的区别就是被 <strong>量词</strong> 修饰的子表达式的匹配行为；</p>
+<pre><code>贪婪模式量词：
+{x,y} ,  {x,} ,  ? ,  * ,   +
+非贪婪模式量词：
+{x,y}?，{x,}?，??，*?， +?</code></pre>
+
+<p>&ensp;&ensp;下面举几个简单的例子:<br>&ensp;&ensp;贪婪模式下</p>
+<pre><code>'dxxxdxxxd'.match(/(d)(\w+)/)
+//-> "dxxxdxxxd" 
+"\w+" 将匹配第一个 "d" 之后的所有字符 "xxxdxxxd"</code></pre>
+<pre><code>'dxxxdxxxd'.match(/(d)(\w+)(d)/)
+//->"dxxxdxxxd" 
+ "\w+" 将匹配第一个 "d" 和最后一个 "d" 之间的所有字符 "xxxdxxx"。
+ 虽然 "\w+" 也能够匹配上最后一个 "d"，但是为了使整个表达式匹配成功，"\w+" 可以 "让出" 它本来能够匹配的最后一个 "d"</code></pre>
+
+<p>&ensp;&ensp;非贪婪模式下</p>
+<pre><code>'dxxxdxxxd'.match(/(d)(\w+?)/)
+//-> "dx"
+"\w+?" 将尽可能少的匹配第一个 "d" 之后的字符，结果是："\w+?" 只匹配了一个 "x"</code></pre>
+<pre><code>'dxxxdxxxd'.match(/(d)(\w+?)(d)/)
+//-> "dxxxd"
+为了让整个表达式匹配成功，"\w+?" 不得不匹配 "xxx" 才可以让后边的 "d" 匹配，从而使整个表达式匹配成功。
+因此，结果是："\w+?" 匹配 "xxx"</code></pre>
+
+<h5 id="位置匹配："><a href="#位置匹配：" class="headerlink" title="位置匹配："></a>位置匹配：</h5><table>
+<thead>
+<tr>
+<th style="text-align:left">字符</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:left">示例</th>
+<th style="text-align:left">结果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">^</td>
+<td style="text-align:left">匹配开头，在多行匹配中匹配行开头</td>
+<td style="text-align:left">“hello”.replace(/^&#124;$/g, ‘#’)</td>
+<td style="text-align:left">“#hello#”</td>
+</tr>
+<tr>
+<td style="text-align:left">$</td>
+<td style="text-align:left">匹配结尾，在多行匹配中匹配行结尾。</td>
+<td style="text-align:left">“I\nlove\njavascript”.replace(/^&#124;$/gm, ‘#’)</td>
+<td style="text-align:left">该示例格式不利展示，请自行运行</td>
+</tr>
+<tr>
+<td style="text-align:left">\b</td>
+<td style="text-align:left">匹配一个字边界，即字与空格间的位置。</td>
+<td style="text-align:left">“[JS] Lesson_01.mp4”.replace(/\b/g, ‘#’)</td>
+<td style="text-align:left">[JS] Lesson_01.mp4.replace(/\b/g, ‘#’)</td>
+</tr>
+<tr>
+<td style="text-align:left">\B</td>
+<td style="text-align:left">匹配非字边界，即所有\b匹配不到的位置。</td>
+<td style="text-align:left">“[JS] Lesson_01.mp4”.replace(/\B/g, ‘#’)</td>
+<td style="text-align:left">#[J#S]# L#e#s#s#o#n#_#0#1.m#p#4</td>
+</tr>
+<tr>
+<td style="text-align:left">(?=p)</td>
+<td style="text-align:left">p是子正则模式，匹配p前面的位置(正向先行断言)</td>
+<td style="text-align:left">“hello”.replace(/(?=l)/g, ‘#’)<br>“hello”.match(/(?=ll)\w+?$/g)</td>
+<td style="text-align:left">he#l#lo<br>[“llo”]</td>
+</tr>
+<tr>
+<td style="text-align:left">(?!p)</td>
+<td style="text-align:left">p是子正则模式，匹配所有非p前面的位置(负向先行断言)</td>
+<td style="text-align:left">“hello”.replace(/(?!l)/g, ‘#’)<br>‘hello’.match(/(?!l)\w+?/g, ‘#’)</td>
+<td style="text-align:left">#h#ell#o#<br>[“h”, “e”, “o”]</td>
+</tr>
+</tbody>
+</table>
+<p>&ensp;&ensp;以上是正则中用于位置匹配的符号。<br>&ensp;&ensp;其中(?=p)和(?!p)又被称为正向先行断言和负向先行断言，网络上对此也有许多解释和相关示例，可自行搜索了解。</p>
+<h4 id="正则里的括号"><a href="#正则里的括号" class="headerlink" title="正则里的括号"></a>正则里的括号</h4><p>&ensp;&ensp;在正则表达式中，我们常常可以看到许多括号。而对于没有正则基础或正则基础薄弱的人来说，这些括号使得正则表达式看起来更加复杂，扑朔迷离。因此有必要对正则表达式中的括号做一个正确的认识。<br>&ensp;&ensp;那么正则中的括号有哪些作用呢？ </p>
+<h5 id="分组和分支结构"><a href="#分组和分支结构" class="headerlink" title="分组和分支结构"></a>分组和分支结构</h5><p>　　分组和分支是正则中括号最显而易见也是最重要的作用。<br>　　1.分组<br>　　　　/(ab)+/<br>　　在这里括号提供分组功能，使量词“+”作用于“ab”这个整体。<br>　　2.分支<br>　　　　/(a|b)c/<br>　　这里的括号包含了多选分支结构(p1|p2)。<br>　　这两点比较简单，就不再赘述。</p>
+<h5 id="捕获分组"><a href="#捕获分组" class="headerlink" title="捕获分组"></a>捕获分组</h5><p>&ensp;&ensp;捕获分组，又称引用分组，是正则中括号的一个重要作用。捕获分组因为着正则表达式除了提取整体匹配的字符串，还可以提取正则中每一个被括号包围的子表达式匹配到字符串。<br>&ensp;&ensp;如下例：</p>
+<pre><code>"2017-06-12".match(/(\d{4})-(\d{2})-(\d{2})/)
+\\-> ["2017-06-12", "2017", "06", "12", index: 0, input: "2017-06-12"]</code></pre> 
+
+<p>&ensp;&ensp;match返回的一个数组，第一个元素是整体匹配结果，然后是各个分组（括号里）匹配的内容，然后是匹配下标，最后是输入的文本。（注意：如果正则有修饰符g，match返回的数组格式是不一样的）。   </p>
+<h5 id="反向引用"><a href="#反向引用" class="headerlink" title="反向引用"></a>反向引用</h5><p>&ensp;&ensp;反向引用实际和捕获分组是类似的作用，二者的区别在于捕获分组是在正则匹配完成后在外部程序中引用分组，而反向引用允许正则在匹配过程中就引用分组匹配到的字符。<br>&ensp;&ensp;如下例：<br>&ensp;&ensp;例如: 日期格式匹配  2016-06-12、2016/06/12</p>
+<pre><code>var regex = /\d{4}(-|\/)\d{2}(-|\/)\d{2}/;
+var string1 = "2017-06-12";
+var string2 = "2017/06/12";
+var string3 = "2016-06/12";
+console.log( regex.test(string1) ); // true
+console.log( regex.test(string2) ); // true
+console.log( regex.test(string3) ); // true</code></pre> 
+
+<p>&ensp;&ensp;其中字符串3明显不符合要求，但是也通过了校验</p>
+<p>&ensp;&ensp;利用反向引用</p>
+<pre><code>var regex = /\d{4}(-|\/)\d{2}\1\d{2}/;
+var string3 = "2016-06/12";
+console.log( regex.test(string3) ); // false</code></pre> 
+
+<p>&ensp;&ensp;注意里面的\1，表示的引用之前的那个分组(-|\/)。不管它匹配到什么（比如-），\1都匹配那个同样的具体某个字符。  </p>
+<h5 id="非捕获分组"><a href="#非捕获分组" class="headerlink" title="非捕获分组"></a>非捕获分组</h5><p>&ensp;&ensp;之前文中出现的分组，都会捕获它们匹配到的数据，以便后续引用，因此也称他们是捕获型分组。<br>&ensp;&ensp;如果只想要括号最原始的功能，但不会引用它，即，既不在API里引用，也不在正则里反向引用。此时可以使用非捕获分组(?:p)</p>
+<pre><code>var regex = /(?:\d{4})-(?:\d{2})-(?:\d{2})/
+var string = "2017-06-12";
+console.log( string.match(regex) ); 
+//-> ["2017-06-12", index: 0, input: "2017-06-12"]</code></pre> 
+
+<h6 id="括号嵌套怎么办？"><a href="#括号嵌套怎么办？" class="headerlink" title="括号嵌套怎么办？"></a>括号嵌套怎么办？</h6><p>&ensp;&ensp;看过以上这么多种括号的作用，难免产生一个疑问，一个正则表达式中如果出现了括号嵌套的情况，那么反向引用的顺序会是什么样的？<br>&ensp;&ensp;这个问题，通过观察下面这个例子可以解决：</p>
+<p><pre><code>var regex = /^((\d)(\d(\d)))\1\2\3\4$/;<br>var string = “1231231233”;<br>console.log( regex.test(string) ); // true<br>console.log( RegExp.$1 ); // 123<br>console.log( RegExp.$2 ); // 1<br>console.log( RegExp.$3 ); // 23<br>console.log( RegExp.$4 ); // 3</code></pre><br>&ensp;&ensp;由此可见，分组的引用顺序是由该分组左括号出现的顺序决定的。</p>
+<h6 id="正则中几种括号的区别"><a href="#正则中几种括号的区别" class="headerlink" title="正则中几种括号的区别"></a>正则中几种括号的区别</h6><p>&ensp;&ensp;()内的内容表示的是一个子表达式，()本身不匹配任何东西，也不限制匹配任何东西，只是把括号内的内容作为同一个表达式来处理。<br>&ensp;&ensp;[]表示匹配的字符在[]中，并且只能出现一次，并且特殊字符写在[]会被当成普通字符来匹配。例如[(a)]，会匹配(、a、)、这三个字符。<br>&ensp;&ensp;{}一般用来表示匹配的长度，比如 \s{3} 表示匹配三个空格，\s[1,3]表示匹配一到三个空格。</p>
+<h4 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h4><p>&ensp;&ensp;正则表达式看似复杂，其实理解透其中的规则之后就会发现，也就是那么回事儿。再复杂的正则表达式也是由最基础的元素符合构成的。当然，要做到熟练掌握正则表达式最重要的还是常用常练，常记常新。</p>
+<p>推荐书籍：</p>
+<p><strong> 精通正则表达式 </strong><br><strong> javascript权威指南 </strong></p>
+<p>更多资料：</p>
+<p><a href="https://zhuanlan.zhihu.com/p/27653434" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/27653434</a>  正则表达式系列总结<br><a href="http://www.cnblogs.com/tugenhua0707/p/5037811.html" target="_blank" rel="noopener">http://www.cnblogs.com/tugenhua0707/p/5037811.html</a>  深入浅出的javascript的正则表达式学习教程<br><a href="http://www.jb51.net/tools/zhengze.html" target="_blank" rel="noopener">http://www.jb51.net/tools/zhengze.html</a> 正则表达式30分钟入门教程</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/正则/" rel="tag"># 正则</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/closure/" rel="next" title="闭包">
+                <i class="fa fa-chevron-left"></i> 闭包
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/front-end-template-engine/" rel="prev" title="前端模板引擎">
+                前端模板引擎 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#正则浅谈"><span class="nav-number">1.</span> <span class="nav-text">正则浅谈</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#写在前面"><span class="nav-number">1.0.1.</span> <span class="nav-text">写在前面</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#什么是正则"><span class="nav-number">1.0.2.</span> <span class="nav-text">什么是正则</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则基础语法"><span class="nav-number">1.0.3.</span> <span class="nav-text">正则基础语法</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#符号匹配："><span class="nav-number">1.0.3.1.</span> <span class="nav-text">符号匹配：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#量词："><span class="nav-number">1.0.3.2.</span> <span class="nav-text">量词：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#贪婪模式与非贪婪模式"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">贪婪模式与非贪婪模式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#位置匹配："><span class="nav-number">1.0.3.4.</span> <span class="nav-text">位置匹配：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#正则里的括号"><span class="nav-number">1.0.4.</span> <span class="nav-text">正则里的括号</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#分组和分支结构"><span class="nav-number">1.0.4.1.</span> <span class="nav-text">分组和分支结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#捕获分组"><span class="nav-number">1.0.4.2.</span> <span class="nav-text">捕获分组</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#反向引用"><span class="nav-number">1.0.4.3.</span> <span class="nav-text">反向引用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#非捕获分组"><span class="nav-number">1.0.4.4.</span> <span class="nav-text">非捕获分组</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#括号嵌套怎么办？"><span class="nav-number">1.0.4.4.1.</span> <span class="nav-text">括号嵌套怎么办？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#正则中几种括号的区别"><span class="nav-number">1.0.4.4.2.</span> <span class="nav-text">正则中几种括号的区别</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结语"><span class="nav-number">1.0.5.</span> <span class="nav-text">结语</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

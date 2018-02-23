@@ -1,0 +1,821 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="css,transition,animation," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="我之前也接触过动画，但是平时没怎么用，一段时间不看就又忘了，transition、translate、transform记得头皮发麻。若本篇文章从概念的角度去介绍transition和animation的用法，会显得枯燥冗余，而且网上资料很多，解释比较单一，比较难理解。今天换一种方式，主要从应用的角度去认识transition和animation的用法。">
+<meta name="keywords" content="css,transition,animation">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Transitions &amp; Animations">
+<meta property="og:url" content="https://wsfe.github.io/2017/10/transitions&animations/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="我之前也接触过动画，但是平时没怎么用，一段时间不看就又忘了，transition、translate、transform记得头皮发麻。若本篇文章从概念的角度去介绍transition和animation的用法，会显得枯燥冗余，而且网上资料很多，解释比较单一，比较难理解。今天换一种方式，主要从应用的角度去认识transition和animation的用法。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295067/animation_transition_dnmbvg.png">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295045/falling-ball_mwh0ar.png">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295660/%E5%9F%BA%E6%9C%ACtimming-function%E5%80%BC_tgcma2.png">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295659/loading%E9%9B%AA%E7%A2%A7%E5%9B%BE_chqndh.png">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295661/steps%E6%9B%B2%E7%BA%BF%E5%9B%BE_cr6aqr.png">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295658/blink%E5%9B%BE1_ijzvow.png">
+<meta property="og:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295660/%E6%96%B9%E5%90%91%E4%B8%8E%E9%A2%9C%E8%89%B2%E6%B8%90%E5%8F%98%E7%9A%84%E5%85%B3%E7%B3%BB_umhxo1.png">
+<meta property="og:updated_time" content="2018-02-22T03:38:44.149Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Transitions &amp; Animations">
+<meta name="twitter:description" content="我之前也接触过动画，但是平时没怎么用，一段时间不看就又忘了，transition、translate、transform记得头皮发麻。若本篇文章从概念的角度去介绍transition和animation的用法，会显得枯燥冗余，而且网上资料很多，解释比较单一，比较难理解。今天换一种方式，主要从应用的角度去认识transition和animation的用法。">
+<meta name="twitter:image" content="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295067/animation_transition_dnmbvg.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2017/10/transitions&animations/"/>
+
+
+
+
+
+  <title>Transitions & Animations | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2017/10/transitions&animations/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Transitions & Animations</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-08T09:16:00+08:00">
+                2017-10-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我之前也接触过动画，但是平时没怎么用，一段时间不看就又忘了，transition、translate、transform记得头皮发麻。若本篇文章从概念的角度去介绍transition和animation的用法，会显得枯燥冗余，而且网上资料很多，解释比较单一，比较难理解。今天换一种方式，主要从应用的角度去认识transition和animation的用法。</p>
+<a id="more"></a>
+<h2 id="关于transition和animation属性"><a href="#关于transition和animation属性" class="headerlink" title="关于transition和animation属性"></a>关于transition和animation属性</h2><p><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295067/animation_transition_dnmbvg.png" alt="transition和animation思维导图"></p>
+<h2 id="Elastic-transition-弹性过渡"><a href="#Elastic-transition-弹性过渡" class="headerlink" title="Elastic transition (弹性过渡)"></a>Elastic transition (弹性过渡)</h2><h3 id="小球下落动画"><a href="#小球下落动画" class="headerlink" title="小球下落动画"></a>小球下落动画</h3><p>根据常识（自由落体）我们都知道，球下降速度会不断变化，接触到地面会反弹，因为还有速度，会继续上升一段时间，后再次下落，如此往复，直到静止。<br><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295045/falling-ball_mwh0ar.png" alt="小球下落过程图"><br>重力势能-&gt;动能-&gt;重力势能-&gt;动能-&gt;静止（阻力的存在）</p>
+<h4 id="keyframes"><a href="#keyframes" class="headerlink" title="@keyframes"></a>@keyframes</h4><p>@keyframes创建动画的原理是，定义关键帧的CSS样式，将一套 CSS 样式逐渐变化为另一套 CSS 样式。<br>以百分比来规定改变发生的时间，或者通过关键词 “from” 和 “to”，等价于 0% 和 100%。</p>
+<ol>
+<li><p>语法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@keyframes animationname &#123;keyframes-selector&#123;css-style;&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>示例</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@keyframes bounce&#123;</span><br><span class="line">    60%,80%, to&#123;//60%、80%、100%时的位置</span><br><span class="line">        transform: translateY(400px);</span><br><span class="line">        animation-timing-function: ease;/*特别规定其的timing函数*/</span><br><span class="line">    &#125;</span><br><span class="line">    70%&#123;//70%时的位置</span><br><span class="line">        transform: translateY(300px);</span><br><span class="line">    &#125;</span><br><span class="line">    90%&#123;//90%时的位置</span><br><span class="line">        transform: translateY(360px);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="贝塞尔曲线"><a href="#贝塞尔曲线" class="headerlink" title="贝塞尔曲线"></a>贝塞尔曲线</h4><p>timing-function有五个可选值：ease(默认)，linear(匀速)，ease-in(逐渐加速)，ease-out(逐渐减速)，ease-in-out(先加速后减速)。想要定义自己想要的效果，就要用到贝塞尔函数cubic-bezier(x1,y1,x2,y2)<br><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295660/%E5%9F%BA%E6%9C%ACtimming-function%E5%80%BC_tgcma2.png" alt="4个贝塞尔曲线图"></p>
+<ol>
+<li><p>语法<br>对应图中的坐标(x1,y1)、(x2,y2)，其中x轴是时间轴，y轴是进度轴，导数就是这个时刻点的速率。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cubic-bezier(x1,y1,x2,y2)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>贝塞尔曲线网站<br><a href="http://cubic-bezier.com/" target="_blank" rel="noopener">cubic-bezier</a></p>
+</li>
+</ol>
+<h3 id="弹性过渡"><a href="#弹性过渡" class="headerlink" title="弹性过渡"></a>弹性过渡</h3><ol>
+<li><p>背景<br>有这样一个需求：一个输入框，当focus的时候有一个tip弹出，提示用户输入框该输入啥，tip显隐的时候就会有过渡的效果。</p>
+</li>
+<li><p>代码</p>
+<ul>
+<li><p>HTML</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;label&gt;</span><br><span class="line">    Your username: &lt;input name=&quot;elastic&quot; id=&quot;username&quot; /&gt;</span><br><span class="line">    &lt;span class=&quot;callout&quot;&gt;Only letters, numbers,</span><br><span class="line">    underscores (_) and hyphens (-) allowed!&lt;/span&gt;</span><br><span class="line">&lt;/label&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">body &#123;</span><br><span class="line">    padding: 1.5em;</span><br><span class="line">    font: 200%/1.6 Baskerville;</span><br><span class="line">&#125;</span><br><span class="line">input &#123;</span><br><span class="line">    display: block;</span><br><span class="line">    padding: 0 .4em;</span><br><span class="line">    font: inherit;</span><br><span class="line">&#125;</span><br><span class="line">.callout&#123;</span><br><span class="line">    position: absolute;//@@inline元素scale()无效</span><br><span class="line">    max-width: 14em;</span><br><span class="line">    padding: .6em .8em;</span><br><span class="line">    border-radius: .3em;</span><br><span class="line">    margin: .3em 0 0 -.2em;</span><br><span class="line">    background: #fed;</span><br><span class="line">    border: 1px solid rgba(0,0,0,.3);</span><br><span class="line">    box-shadow: .05em .2em .6em rgba(0,0,0,.2);</span><br><span class="line">    font-size: 75%;</span><br><span class="line">&#125;</span><br><span class="line">.callout:before&#123;/*完成倒三角*/</span><br><span class="line">    position: absolute;</span><br><span class="line">    top: -.4em;</span><br><span class="line">    left: 1em;</span><br><span class="line">    content: &apos;&apos;;</span><br><span class="line">    padding: .35em;</span><br><span class="line">    background: #fed;</span><br><span class="line">    border: inherit;</span><br><span class="line">    border-right: 0;</span><br><span class="line">    border-bottom: 0;</span><br><span class="line">    transform: rotate(45deg);</span><br><span class="line">&#125;</span><br><span class="line">/*用transition来实现*/</span><br><span class="line">input[name=&quot;elastic&quot;]:not(:focus) + .callout&#123;</span><br><span class="line">    transform: scale(0);</span><br><span class="line">    /*属性对应解释</span><br><span class="line">    *@@ 消失的时间会比出现的时间长，因为出现只用了500ms的一半,加个transition-duration控制时间</span><br><span class="line">    *@@ 加上transition-property，指定要过渡的属性为transform</span><br><span class="line">    *@@ 规定了不聚焦时的动画函数为ease，不加这个，消失时会突然变大一下，默认用了和出现时相同的timing-function</span><br><span class="line">    */</span><br><span class="line">    transition: .25s transform ease;</span><br><span class="line">&#125;</span><br><span class="line">.callout&#123;</span><br><span class="line">    transition: .5s transform cubic-bezier(.25,.1,.3,1.5);/*贝塞尔函数横轴(Time)不能超过1，但纵轴(Progress)可以,有Back效果*/</span><br><span class="line">    transform-origin: 1.4em -.4em;/*动画起步点*/</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Frame-by-frame-animation-逐帧动画"><a href="#Frame-by-frame-animation-逐帧动画" class="headerlink" title="Frame by frame animation (逐帧动画)"></a>Frame by frame animation (逐帧动画)</h2><ol>
+<li><p>背景<br>在我们拥有一个动画每一帧的情况下，我们来完成一个loading效果，雪碧图如下<br><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295659/loading%E9%9B%AA%E7%A2%A7%E5%9B%BE_chqndh.png" alt="loading雪碧图"></p>
+</li>
+<li><p>animation-timing-function之steps()<br>相较于贝塞尔曲线，steps可以被认为是分段函数<br><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295661/steps%E6%9B%B2%E7%BA%BF%E5%9B%BE_cr6aqr.png" alt="steps曲线图">    </p>
+</li>
+<li><p>代码</p>
+<ul>
+<li><p>HTML</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;loader&quot;&gt;Loading...&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">@keyframes loader&#123;</span><br><span class="line">    to&#123;</span><br><span class="line">        background-position: -800px 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.loader&#123;</span><br><span class="line">    width: 100px;</span><br><span class="line">    height: 100px;</span><br><span class="line">    background: url(img/loader.png) 0 0;</span><br><span class="line">    /*steps()</span><br><span class="line">    *@@ steps(8)表示loader的每个阶段分8帧</span><br><span class="line">    *@@ 这里整个动画时间为1s，动画只有一个阶段，有八帧，说明每帧的停留时间就是0.125s(125ms)</span><br><span class="line">    *@@ steps的设置都是针对两个关键帧之间的，而非是整个keyframes</span><br><span class="line">    */</span><br><span class="line">    animation: loader 1s infinite steps(8);</span><br><span class="line">    line-height: 100px;</span><br><span class="line">    text-align: center;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Blinking-闪烁"><a href="#Blinking-闪烁" class="headerlink" title="Blinking (闪烁)"></a>Blinking (闪烁)</h2><p>之前是有<blink>标签的，用于定义闪烁的字体，已被废除<br><a href="http://blog.jobbole.com/83493/" target="_blank" rel="noopener">揭秘史上最遭恨的 Blink 标签的起源</a><br>现在css还保留的text-decoration:blink，然而我发现大部分浏览器也是不支持的<br>但有时候仍然需要blink的效果，我们可以用动画来实现</blink></p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><p>闪烁其实就是文字的显示隐藏，当频率达到一定值时，就有闪烁的感觉：</p>
+<ul>
+<li>可以通过对dom结构的opacity设置为0来隐藏</li>
+<li>可以通过对文本处理，color为transparent来隐藏</li>
+<li>可以通过border-color来达到闪烁的效果</li>
+</ul>
+<p>我们接下来以普遍的文字闪烁进行讲解。</p>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><ul>
+<li><p>HTML结构</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;p class=&quot;highlight&quot;&gt;blink blink blink&lt;/p&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">//这样达到了闪烁的预期，但是，还是有需要优化的地方：我们能明显感觉到，字体消失的下一个又突然的变亮，不够的自然。</span><br><span class="line">@keyframes blink-smooth&#123;</span><br><span class="line">50%&#123;/*有1/2帧在停留状态*/</span><br><span class="line">        color: transparent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.highlight&#123;</span><br><span class="line">    animation: 1s blink-smooth infinite;</span><br><span class="line">    font-size: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上代码产生的效果会不够自然，颜色变化可以参照下图<br><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295658/blink%E5%9B%BE1_ijzvow.png" alt="normal对应效果"><br>想要有渐变的效果，就要对动画的方向进行改变</p>
+<h3 id="animation-direction"><a href="#animation-direction" class="headerlink" title="animation-direction"></a>animation-direction</h3><p>四个值</p>
+<ul>
+<li>Normal 规定的正向效果</li>
+<li>Reverse 规定的反向</li>
+<li>Alternate  奇数次时是正向，偶数次时是反向</li>
+<li>Alternate-revere 偶数次时是正向，奇数次时是反向<br>四个值分别对应的效果为<br><img src="http://res.cloudinary.com/demg4xdkj/image/upload/v1508295660/%E6%96%B9%E5%90%91%E4%B8%8E%E9%A2%9C%E8%89%B2%E6%B8%90%E5%8F%98%E7%9A%84%E5%85%B3%E7%B3%BB_umhxo1.png" alt="alternate对应效果"><h3 id="改进后的CSS"><a href="#改进后的CSS" class="headerlink" title="改进后的CSS"></a>改进后的CSS</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@keyframes blink-smooth&#123;</span><br><span class="line">    to&#123;//100%时字体是透明的</span><br><span class="line">        color: transparent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.highlight&#123;</span><br><span class="line">    animation: 1s blink-smooth infinite alternate;/*随着奇偶反转*/</span><br><span class="line">    font-size: 50px;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Typing-animation-打字效果"><a href="#Typing-animation-打字效果" class="headerlink" title="Typing animation (打字效果)"></a>Typing animation (打字效果)</h2><p>有时候啊，我们希望文字一个个出现，模拟一下打字的场景，感觉那样非常的酷<br><a href="http://element.eleme.io/" target="_blank" rel="noopener">饿了么</a></p>
+<h3 id="思路-1"><a href="#思路-1" class="headerlink" title="思路"></a>思路</h3><p>我们可以用动画的效果逐渐增加可见区域dom的长度，从而实现打字的效果<br>局限性，只能打一行的字，不支持多行，但是一行也能满足我们的要求</p>
+<h3 id="初体验"><a href="#初体验" class="headerlink" title="初体验"></a>初体验</h3><h4 id="代码-1"><a href="#代码-1" class="headerlink" title="代码"></a>代码</h4><ul>
+<li><p>HTML</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1&gt;CSS is awesome!&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@keyframes typing&#123;</span><br><span class="line">    from&#123;</span><br><span class="line">        width: 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">h1&#123;</span><br><span class="line">    animation: typing 8s;</span><br><span class="line">    font-size: 2em;</span><br><span class="line">    width: 30em;/*15*2=30em*/</span><br><span class="line"></span><br><span class="line">    white-space: nowrap;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="新的问题"><a href="#新的问题" class="headerlink" title="新的问题"></a>新的问题</h3><p>新的问题出现：</p>
+<ol>
+<li>动画太平滑了，没有那种一个文字一个文字打出来的感觉</li>
+<li>还有个不明显的问题就是：我们这边写死了宽度，这个宽度是哪里来的，瞎蒙的么？字数变化了，我们又该怎么计算这个宽度？</li>
+<li>缺少光标</li>
+</ol>
+<h3 id="解决方案"><a href="#解决方案" class="headerlink" title="解决方案"></a>解决方案</h3><p>第一个问题用steps来解决，因为steps可以给我们提供一帧一帧的感觉<br>第二个问题：<br>引入<a href="http://www.zhangxinxu.com/wordpress/2016/07/monospaced-font-css3-ch-unit/" target="_blank" rel="noopener">ch</a>单位的概念，表示0这个字符的长度，monospace（单间隔）字体中，0和任意字符的长度是一样的，所以长度是15（包括空格），但是这个还是要手动去设置dom的长度，结合js我们可以自动设置dom的长度，便于拓展和可维护性<br>第三个问题发挥想象力，最右边的字永远是靠近dom结构的border的，所以我们可以把border作为我们的光标</p>
+<h3 id="再次尝试"><a href="#再次尝试" class="headerlink" title="再次尝试"></a>再次尝试</h3><ul>
+<li><p>HTML</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;h1&gt;CSS is awesome!&lt;/h1&gt;</span><br><span class="line">&lt;h1&gt;CSS is awesome!hahahah&lt;/h1&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@keyframes typing&#123;</span><br><span class="line">    from&#123;</span><br><span class="line">        width: 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">@keyframes caret&#123;</span><br><span class="line">    50%&#123;</span><br><span class="line">        border-color: transparent;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">h1&#123;</span><br><span class="line">    font: bold 200% Consolas, Monaco, monospace;/*一定要是单间隔字体哦！*/</span><br><span class="line">    white-space: nowrap;</span><br><span class="line">    overflow: hidden;</span><br><span class="line">    border-right: .05em solid;/*不需要去指定border的颜色，默认为text的颜色*/</span><br><span class="line">    animation: typing 7s steps(15),caret 1s steps(1) infinite;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>JS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[].forEach.call(document.getElementsByTagName(&apos;h1&apos;),function(h1) &#123;</span><br><span class="line">    var len = h1.textContent.length, s = h1.style;</span><br><span class="line">    s.width = len + &apos;ch&apos;;</span><br><span class="line">    s.animationTimingFunction = &quot;steps(&quot;+len+&quot;),steps(1)&quot;;//一个是typing,一个是caret</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="Smooth-state-animations-平滑动画"><a href="#Smooth-state-animations-平滑动画" class="headerlink" title="Smooth state animations (平滑动画)"></a>Smooth state animations (平滑动画)</h2><p>当我们有一个很长的图片，比如说风景图，<br>这张风景图（1295x616）呢，要显示在一个相对小很多的容器里面，比如说150x300，我们要怎么处理？<br>首先一种思路我们可能压缩图片嘛，但是必须是等比例的压缩，不然会变形<br>然后想到了css属性background-size可以调整图片尺寸大小，比如说contain（照片会被包含在容器内，但往往会放大缩小），cover（损失掉多出的部分）<br>强行设置background-sizing:100% 100%;图片就会变形<br>其实我们可以用动画的效果让图片不断的滚动，这样用户可以看到图片上的所有内容，也好似身临其境，用户体验是非常棒的。</p>
+<h3 id="思路-2"><a href="#思路-2" class="headerlink" title="思路"></a>思路</h3><p>通过动画让图片滚动</p>
+<h3 id="初体验-1"><a href="#初体验-1" class="headerlink" title="初体验"></a>初体验</h3><ul>
+<li><p>HTML</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;panoramic&quot;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@keyframes panoramic&#123;</span><br><span class="line">    to &#123;</span><br><span class="line">        background-position: 100% 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.panoramic&#123;</span><br><span class="line">    margin: 0 auto;</span><br><span class="line">    width: 150px;</span><br><span class="line">    height: 300px;</span><br><span class="line">    background: url(&apos;./img/lanscape.jpg&apos;);</span><br><span class="line">    background-size: auto 100%;</span><br><span class="line">    animation: panoramic 10s linear infinite alternate;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="新的问题-1"><a href="#新的问题-1" class="headerlink" title="新的问题"></a>新的问题</h3><p>新的问题出现：</p>
+<ol>
+<li>有时候我们需要的动画不是自动播放的，我们需要根据用户的一些操作去响应我们的动画，比如:hover伪类的时候实现动画效果<br>那么我们需要考虑的就hover的时候动画开始，鼠标移除的时候，动画停止。</li>
+</ol>
+<h3 id="解决方案-1"><a href="#解决方案-1" class="headerlink" title="解决方案"></a>解决方案</h3><p>我们要是能设置鼠标移入和移出时的动作就好了，控制动画的状态那就完美，这就要用到下面的属性<br>Animation-play-state（用来控制动画的状态）有两个状态：paused（动画暂停）和running（动画开始）</p>
+<h3 id="再次尝试-1"><a href="#再次尝试-1" class="headerlink" title="再次尝试"></a>再次尝试</h3><ul>
+<li><p>HTML</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;div class=&quot;panoramic&quot;&gt;&lt;/div&gt;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>CSS</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">@keyframes panoramic&#123;</span><br><span class="line">    to &#123;</span><br><span class="line">        background-position: 100% 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">.panoramic&#123;</span><br><span class="line">    margin: 0 auto;	</span><br><span class="line">    width: 150px;</span><br><span class="line">    height: 300px;</span><br><span class="line">    background: url(&apos;./img/lanscape.jpg&apos;);</span><br><span class="line">    background-size: auto 100%;</span><br><span class="line">    animation: panoramic 10s linear infinite alternate;</span><br><span class="line">    animation-play-state: paused;</span><br><span class="line">&#125;</span><br><span class="line">.panoramic:hover,.panoramic:focus&#123;</span><br><span class="line">    animation-play-state: running;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag"># css</a>
+          
+            <a href="/tags/transition/" rel="tag"># transition</a>
+          
+            <a href="/tags/animation/" rel="tag"># animation</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/iframe/" rel="next" title="浅谈iframe及其跨域通信">
+                <i class="fa fa-chevron-left"></i> 浅谈iframe及其跨域通信
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/vue-virtual-dom/" rel="prev" title="vue虚拟dom">
+                vue虚拟dom <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于transition和animation属性"><span class="nav-number">1.</span> <span class="nav-text">关于transition和animation属性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elastic-transition-弹性过渡"><span class="nav-number">2.</span> <span class="nav-text">Elastic transition (弹性过渡)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#小球下落动画"><span class="nav-number">2.1.</span> <span class="nav-text">小球下落动画</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#keyframes"><span class="nav-number">2.1.1.</span> <span class="nav-text">@keyframes</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#贝塞尔曲线"><span class="nav-number">2.1.2.</span> <span class="nav-text">贝塞尔曲线</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#弹性过渡"><span class="nav-number">2.2.</span> <span class="nav-text">弹性过渡</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Frame-by-frame-animation-逐帧动画"><span class="nav-number">3.</span> <span class="nav-text">Frame by frame animation (逐帧动画)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blinking-闪烁"><span class="nav-number">4.</span> <span class="nav-text">Blinking (闪烁)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路"><span class="nav-number">4.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码"><span class="nav-number">4.2.</span> <span class="nav-text">代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#animation-direction"><span class="nav-number">4.3.</span> <span class="nav-text">animation-direction</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#改进后的CSS"><span class="nav-number">4.4.</span> <span class="nav-text">改进后的CSS</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Typing-animation-打字效果"><span class="nav-number">5.</span> <span class="nav-text">Typing animation (打字效果)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路-1"><span class="nav-number">5.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初体验"><span class="nav-number">5.2.</span> <span class="nav-text">初体验</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#代码-1"><span class="nav-number">5.2.1.</span> <span class="nav-text">代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新的问题"><span class="nav-number">5.3.</span> <span class="nav-text">新的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案"><span class="nav-number">5.4.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再次尝试"><span class="nav-number">5.5.</span> <span class="nav-text">再次尝试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Smooth-state-animations-平滑动画"><span class="nav-number">6.</span> <span class="nav-text">Smooth state animations (平滑动画)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#思路-2"><span class="nav-number">6.1.</span> <span class="nav-text">思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#初体验-1"><span class="nav-number">6.2.</span> <span class="nav-text">初体验</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新的问题-1"><span class="nav-number">6.3.</span> <span class="nav-text">新的问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解决方案-1"><span class="nav-number">6.4.</span> <span class="nav-text">解决方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#再次尝试-1"><span class="nav-number">6.5.</span> <span class="nav-text">再次尝试</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

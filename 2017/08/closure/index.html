@@ -1,0 +1,678 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js,闭包," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="说起闭包，它是JavaScript重要的核心技术之一,在面试以及实际应用当中，我们都离不开它们。要理解闭包，首先我们要了解一下执行环境和作用域链这两个重要概念。一、执行环境执行环境定义了变量或函数有权访问的其他数据，决定了他们各自的行为。每个执行环境都有一个与之关联的变量对象，环境中定义的所有变量和函数都保存在这个对象中。执行环境主要包括全局环境和局部环境。 请看下面例子1234567891011">
+<meta name="keywords" content="js,闭包">
+<meta property="og:type" content="article">
+<meta property="og:title" content="闭包">
+<meta property="og:url" content="https://wsfe.github.io/2017/08/closure/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="说起闭包，它是JavaScript重要的核心技术之一,在面试以及实际应用当中，我们都离不开它们。要理解闭包，首先我们要了解一下执行环境和作用域链这两个重要概念。一、执行环境执行环境定义了变量或函数有权访问的其他数据，决定了他们各自的行为。每个执行环境都有一个与之关联的变量对象，环境中定义的所有变量和函数都保存在这个对象中。执行环境主要包括全局环境和局部环境。 请看下面例子1234567891011">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-22T03:38:44.147Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="闭包">
+<meta name="twitter:description" content="说起闭包，它是JavaScript重要的核心技术之一,在面试以及实际应用当中，我们都离不开它们。要理解闭包，首先我们要了解一下执行环境和作用域链这两个重要概念。一、执行环境执行环境定义了变量或函数有权访问的其他数据，决定了他们各自的行为。每个执行环境都有一个与之关联的变量对象，环境中定义的所有变量和函数都保存在这个对象中。执行环境主要包括全局环境和局部环境。 请看下面例子1234567891011">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2017/08/closure/"/>
+
+
+
+
+
+  <title>闭包 | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2017/08/closure/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">闭包</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-08T11:16:43+08:00">
+                2017-08-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>说起闭包，它是JavaScript重要的核心技术之一,在面试以及实际应用当中，我们都离不开它们。要理解闭包，首先我们要了解一下执行环境和作用域链这两个重要概念。<br>一、执行环境<br>执行环境定义了变量或函数有权访问的其他数据，决定了他们各自的行为。每个执行环境都有一个与之关联的变量对象，环境中定义的所有变量和函数都保存在这个对象中。执行环境主要包括全局环境和局部环境。</p>
+<p>请看下面例子<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">var color=<span class="string">"blue"</span>;</span><br><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">changecolor</span></span>()&#123;</span><br><span class="line">  var anothercolor=<span class="string">"red"</span>;</span><br><span class="line">  <span class="keyword">function</span> <span class="function"><span class="title">swaprcolors</span></span>()&#123;</span><br><span class="line">    var tempcolor=anothercolor;</span><br><span class="line">    anothercolor=color;</span><br><span class="line">    color=tempcolor;</span><br><span class="line">  &#125;</span><br><span class="line"> swapcolors();</span><br><span class="line">&#125;</span><br><span class="line">changecolor();</span><br><span class="line">1、第一步，首先是全局上下文入栈。</span><br><span class="line">2、全局上下文入栈之后，其中的可执行代码开始执行，直到遇到了changeColor()，changeColor会创建它自己的执行上下文，因此第二步就是changeColor的执行上下文入栈。</span><br><span class="line">3、changeColor的上下文入栈之后，控制器开始执行其中的代码，遇到swapcolors()之后又创建了一个执行上下文。因此第三步是swapcolors的执行上下文入栈。</span><br><span class="line">4、在swapcolors的可执行代码中，再没有遇到其他能生成执行上下文的情况，因此这段代码顺利执行完毕，swapcolors的上下文从栈中弹出。</span><br><span class="line">5、swapcolors的执行上下文弹出之后，继续执行changeColor的代码，也没有再遇到其他执行上下文，顺利执行完毕之后弹出。这样，ECStack中就只剩下全局上下文了。</span><br><span class="line">6、全局上下文在浏览器窗口关闭后出栈。</span><br></pre></td></tr></table></figure></p>
+<p>记住：<br>1、执行上下文是单线程的<br>2、执行上下文是同步执行的，只有栈顶的上下文处于执行中，其他上下文需要等待<br>3、全局上下文只有唯一的一个，它在浏览器关闭时出栈<br>4、每次某个函数被调用，就会有个新的执行上下文生成</p>
+<a id="more"></a>
+<p>二、作用域链<br>当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途是保证对执行环境有权访问的所有变量和函数的有序访问。作用域链的最前端，是当前执行的代码所在环境的变量对象。如果这个环境是函数，则将其活动对象作为变量对象。作用域链中的下一个变量对象来自包含的环境，再下一个变量对象则来自下一个包含的环境，这样一直延续到全局执行环境</p>
+<p>请看下面例子<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>  compare(value1,value2)&#123;</span><br><span class="line">  <span class="keyword">if</span>(value1&lt;value2)&#123;</span><br><span class="line">    <span class="built_in">return</span> -1</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">    <span class="built_in">return</span> 0;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">var result = compare(5,10)</span><br><span class="line">在创建compare这个函数的时候，会创建一个包含全局变量对象的作用域链，这个作用域链被保存在内部的[scope]属性中，当调用compare函数时，会为函数创建一个执行环境，然后通过复制函数的【scope】属性中的对象构建起执行环境的作用域链。然后在执行的时候会有一个compre的活动对象被创建并推入执行环境的作用域链的前端。对于这个例子的执行环境而言，其作用域链中包含两个变量对象：本地活动对象和全局变量对象。所以，作用域链本质上是一个指向变量对象的指针列表，它只引用但不实际包含变量对象。一般来讲，当函数执行完毕后，局部活动对象就会被销毁，内存仅保存全局作用域，但是闭包的情况不同</span><br></pre></td></tr></table></figure></p>
+<p>三、闭包<br>各种专业文献上的”闭包”定义非常抽象，其实闭包就是指有权访问另一个函数作用域中的变量的函数。由于在Javascript语言中，只有函数内部的子函数才能读取局部变量，因此可以把闭包简单理解成”定义在一个函数内部的函数”。</p>
+<p>我们来看个例子</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">f1</span></span>()&#123;</span><br><span class="line">　var n=999;</span><br><span class="line">　nAdd=<span class="function"><span class="title">function</span></span>()&#123;n+=1&#125;</span><br><span class="line">　<span class="keyword">function</span> <span class="function"><span class="title">f2</span></span>()&#123;</span><br><span class="line">　　alert(n);</span><br><span class="line">　&#125;</span><br><span class="line">　<span class="built_in">return</span> f2;</span><br><span class="line">&#125;</span><br><span class="line">var result=f1();</span><br><span class="line">result(); // 999</span><br><span class="line">nAdd();</span><br><span class="line">result(); // 1000</span><br><span class="line">result实际上就是闭包f2函数。它一共运行了两次，第一次的值是999，第二次的值是1000。这证明了，函数f1中的局部变量n一直保存在内存中，并没有在f1调用后被自动清除。原因在f2被返回后，它的作用域链被初始化为包含f1()函数的活动对象和全局变量对象。这样f2这个函数就可以访问f1()函数中定义的所有变量。而且在f1()函数执行完毕后，它的活动对象不会被销毁，因为f2的作用域链仍然在引用这个活动对象。直到f2函数被销毁后，f1的活动对象才会被销毁。</span><br></pre></td></tr></table></figure>
+<p>四、闭包的用途</p>
+<p>1、通过返回值来获取内部函数的引用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">outer</span></span>() &#123;//获取函数内部的变量</span><br><span class="line">  var a = 999;</span><br><span class="line">  <span class="keyword">function</span> <span class="function"><span class="title">inner</span></span>()&#123;</span><br><span class="line">    console.log(a);</span><br><span class="line">  &#125;</span><br><span class="line"> <span class="built_in">return</span> inner;      </span><br><span class="line">&#125;</span><br><span class="line">var fn = outer(); </span><br><span class="line">fn(); // 999</span><br><span class="line">原来在函数外面是访问不到函数里面的a变量的，在这个例子中inner（）通过返回值获取到outer的变量，获取完后就可以在全局中调</span><br><span class="line">用，并且访问outer里面的a变量</span><br></pre></td></tr></table></figure>
+<p>2、实现封装</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span> <span class="function"><span class="title">Person</span></span>()&#123;  </span><br><span class="line">  //变量作用域为函数内部，外部无法访问    </span><br><span class="line">  var name = <span class="string">"default"</span>;       </span><br><span class="line">  <span class="built_in">return</span> &#123;    </span><br><span class="line">    getName : <span class="function"><span class="title">function</span></span>()&#123;    </span><br><span class="line">      <span class="built_in">return</span> name;    </span><br><span class="line">    &#125;,    </span><br><span class="line">    setName : <span class="keyword">function</span>(newName)&#123;    </span><br><span class="line">      name = newName;    </span><br><span class="line">    &#125;    </span><br><span class="line">  &#125;    </span><br><span class="line">&#125;;    </span><br><span class="line">var john = Person();                      </span><br><span class="line">console.log(john.getName());    </span><br><span class="line">john.setName(<span class="string">"john"</span>);    </span><br><span class="line">console.log(john.getName());   </span><br><span class="line">在Person函数之外的地方无法访问其内部的变量，而通过提供闭包的形式来访问，利用闭包可以给对象设置私有属性并利用特权</span><br><span class="line">(Privileged)方法访问私有属性。闭包的另一个重要用途是实现面向对象中的对象，传统的对象语言都提供类的模板机制，这样不同的对象(类的实例)拥有独立的成员及状态，互不干涉。虽然JavaScript中没有类这样的机制，但是通过使用闭包，我们可以模拟出这样的机制。</span><br><span class="line"></span><br><span class="line">john和jack都可以称为Person这个类的实例，因为这两个实例对name这个成员的访问是独立的，互不影响的</span><br></pre></td></tr></table></figure>
+<p>3、实现缓存</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">function</span>  <span class="function"><span class="title">configCache</span></span>()&#123;</span><br><span class="line">  var  obj=&#123;&#125;;//设置一个内部的对象 用来存储缓存数据  </span><br><span class="line">  <span class="built_in">return</span> &#123;</span><br><span class="line">    setCache:<span class="keyword">function</span>(k,v)&#123;//设置缓存</span><br><span class="line">        obj[k]=v;</span><br><span class="line">    &#125;,</span><br><span class="line">    getCache:<span class="keyword">function</span>(k)&#123;//获取缓存</span><br><span class="line">        <span class="built_in">return</span> obj[k];</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line">var conf = configCache();</span><br><span class="line">console.log(conf);</span><br><span class="line">conf.setCache(1,<span class="string">'demo'</span>);</span><br><span class="line">console.log(conf.getCache(1));//demo</span><br><span class="line">在这里例子里，我们通过setCache这个方法来缓存数据，然后通过getCache这个方法来获取到我们的缓存数据</span><br></pre></td></tr></table></figure>
+<p>五、使用闭包时的注意点</p>
+<p>1、由于闭包会使得函数中的变量都被保存在内存中，内存消耗很大，所以不能滥用闭包，否则会造成网页的性能问题，在IE中可能导致内存泄露。解决方法是，在退出函数之前，将不使用的局部变量全部删除。</p>
+<p>2、闭包保存的是包含函数的整个变量对象，所取得的外部对象变量为闭包被调用时的对象变量，一般为外部函数变量的最后一个值<br>（完）</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+            <a href="/tags/闭包/" rel="tag"># 闭包</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/web-xss/" rel="next" title="Web安全-xss">
+                <i class="fa fa-chevron-left"></i> Web安全-xss
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/regular-talk/" rel="prev" title="正则浅谈">
+                正则浅谈 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview sidebar-panel sidebar-panel-active">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

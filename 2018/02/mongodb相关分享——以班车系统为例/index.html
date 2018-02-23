@@ -1,0 +1,768 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="MongoDB相关分享以班车系统为例1. 文档型数据库MongoDB先简单介绍下文档型数据库是什么。  面向文档的数据库（英语：Document-oriented database）或文档储存，是一种被设计用于储存、检索和管理文档导向信息（也称为“半结构化数据”）的计算机程序。文档导向的数据库是 NoSQL 数据库的一个主要类别，文档导向的数据库的普及程度已经随着 NoSQL 本身被不断使用而有所">
+<meta property="og:type" content="article">
+<meta property="og:title" content="秘密前端小组">
+<meta property="og:url" content="https://wsfe.github.io/2018/02/mongodb相关分享——以班车系统为例/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="MongoDB相关分享以班车系统为例1. 文档型数据库MongoDB先简单介绍下文档型数据库是什么。  面向文档的数据库（英语：Document-oriented database）或文档储存，是一种被设计用于储存、检索和管理文档导向信息（也称为“半结构化数据”）的计算机程序。文档导向的数据库是 NoSQL 数据库的一个主要类别，文档导向的数据库的普及程度已经随着 NoSQL 本身被不断使用而有所">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://s1.ax1x.com/2018/02/22/9U12fs.png">
+<meta property="og:image" content="https://s1.ax1x.com/2018/02/22/9U1Wpn.png">
+<meta property="og:image" content="http://ww4.sinaimg.cn/large/0060lm7Tly1fopggo3xwzj30mu0p7n27.jpg">
+<meta property="og:updated_time" content="2018-02-23T11:47:05.430Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="秘密前端小组">
+<meta name="twitter:description" content="MongoDB相关分享以班车系统为例1. 文档型数据库MongoDB先简单介绍下文档型数据库是什么。  面向文档的数据库（英语：Document-oriented database）或文档储存，是一种被设计用于储存、检索和管理文档导向信息（也称为“半结构化数据”）的计算机程序。文档导向的数据库是 NoSQL 数据库的一个主要类别，文档导向的数据库的普及程度已经随着 NoSQL 本身被不断使用而有所">
+<meta name="twitter:image" content="https://s1.ax1x.com/2018/02/22/9U12fs.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2018/02/mongodb相关分享——以班车系统为例/"/>
+
+
+
+
+
+  <title> | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2018/02/mongodb相关分享——以班车系统为例/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline"></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-02-23T19:48:07+08:00">
+                2018-02-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="MongoDB相关分享"><a href="#MongoDB相关分享" class="headerlink" title="MongoDB相关分享"></a>MongoDB相关分享</h1><h2 id="以班车系统为例"><a href="#以班车系统为例" class="headerlink" title="以班车系统为例"></a>以班车系统为例</h2><h3 id="1-文档型数据库MongoDB"><a href="#1-文档型数据库MongoDB" class="headerlink" title="1. 文档型数据库MongoDB"></a>1. 文档型数据库MongoDB</h3><p>先简单介绍下文档型数据库是什么。</p>
+<blockquote>
+<p>面向文档的数据库（英语：Document-oriented database）或文档储存，是一种被设计用于储存、检索和管理文档导向信息（也称为“半结构化数据”）的计算机程序。文档导向的数据库是 NoSQL 数据库的一个主要类别，文档导向的数据库的普及程度已经随着 NoSQL 本身被不断使用而有所增长。 ——维基百科</p>
+</blockquote>
+<p>文档型数据库与传统的关系型数据库存在着差异。</p>
+<blockquote>
+<p>关系数据库通常将数据存储在相互独立的表格中，这些表格由程序开发者定义，单独一个的对象可以散布在若干表格中。 对于数据库中某单一实例中的一个给定对象，文档数据库存储其所有信息，并且每一个被存储的对象可与任一其它对象不同。这使得将对象映射入数据库简单化，并通常会消除任何类似于对象关系映射的事物。这也使得文档数据库对网络应用有较大价值，因为后者的数据处在不断变化中，而且对于后者来说，部署速度是一个重要问题。</p>
+</blockquote>
+<p>关系型数据库存在ACID原则，即：</p>
+<ul>
+<li>原子性（Atomic）</li>
+</ul>
+<p>要么全做，要么全不做</p>
+<ul>
+<li>一致性（Consistency）</li>
+</ul>
+<p>数据在各个表中是一致的</p>
+<ul>
+<li>隔离性（Identity）</li>
+</ul>
+<p>两个对统一数据表操作时，通过锁机制防止重复写脏数据。</p>
+<ul>
+<li>持久性（Consistency）</li>
+</ul>
+<p>数据持久化，即数据最终是以文件的形式存在于文件系统中，不会由于系统崩溃或是突然断电等外部因素引发数据丢失。</p>
+<p>文档型数据库主要有五个特点：</p>
+<ul>
+<li>数据模型丰富</li>
+</ul>
+<p>逻辑上是将对象按照文档模型来存储，同时支持了数组以及文档内嵌。文档的键不会事先定义，也不会固定不变，这就使得在需求经常变更情况下做修改更为便利，数据模型变更也更方便。</p>
+<ul>
+<li>容易扩展</li>
+</ul>
+<p>MongoDB支持主备切换，可以配置自动在多台服务器之间分割数据，以及进行主从复制，备份数据。它还可以平衡集群的数据和负载，自动重排文档。</p>
+<ul>
+<li>功能丰富</li>
+</ul>
+<p>支持索引、JavaScript函数、数据聚合功能等。文件存储是通过BSON格式，没有关系型数据库中常见联接（join）和事务。</p>
+<ul>
+<li>不牺牲速度</li>
+</ul>
+<blockquote>
+<p>MongoDB使用MongoDB传输协议作为与服务器交互的主要方式（与之对应的协议，像是HTTP/REST，需要更多的开销）。它对文档进行动态填充，预分配数据文件，用空间换取性能的文档。默认的存储引擎中使用了内存映射文件，将内存管理工作交给操作系统去处理。动态查询优化器会“记住”执行查询最高效的方式。总之，MongoDB在各方面都充分考虑了性能。</p>
+</blockquote>
+<ul>
+<li>管理简便</li>
+</ul>
+<blockquote>
+<p>MongoDB尽量让服务器自治来简化数据库的管理。除了启动数据库服务器之外，几乎没有什么必要的管理操作。如果主服务器挂掉了，MongoDB会自动切换到备份服务器上，并且将备份服务器提升为活跃服务器。在分布式环境下，集群只需要知道有新增加的节点，就会自动集成和配置新节点</p>
+</blockquote>
+<h3 id="2-与关系型数据库范式设计上的区别"><a href="#2-与关系型数据库范式设计上的区别" class="headerlink" title="2. 与关系型数据库范式设计上的区别"></a>2. 与关系型数据库范式设计上的区别</h3><h4 id="一对一关系"><a href="#一对一关系" class="headerlink" title="一对一关系"></a>一对一关系</h4><p><img src="https://s1.ax1x.com/2018/02/22/9U12fs.png" alt="一对一关系"><br>与关系型数据库中的表示方式基本一致，在一个对象中新增对另一个对象的引用，通常是通过另一个对象的ID来表示。在这个关系上，两种数据库的设计模式一致。</p>
+<h4 id="一对多关系"><a href="#一对多关系" class="headerlink" title="一对多关系"></a>一对多关系</h4><p>与上述的关系基本一致，同样是和关系型数据库类似，在“多”对应的一方的文档上添加对“一”那一方的引用。</p>
+<h4 id="多对多关系"><a href="#多对多关系" class="headerlink" title="多对多关系"></a>多对多关系</h4><p><img src="https://s1.ax1x.com/2018/02/22/9U1Wpn.png" alt="多对多关系"><br>在关系型数据库的情况下，如果存在多对多关系，多对多关系本身会被单拿出来，由一个新的关系表来处理，每条记录代表一个一对一单向关系。由于MongoDB支持数组，因此不需要像关系型数据库那样新增一个关系表，来表示多对多关系。在对引用进行操作的情况（增加、修改）不多的情况下，可以使用双向嵌套，即是在两个文档上分别增加对对方的引用（通常是ID，也可以是内嵌）。</p>
+<p>在需要对数据读取进行优化的场合（或者是对引用的操作不多的情况下），可以使用单向嵌套的方式，通常是属性相对较少的文档作为内嵌子文档。</p>
+<h3 id="3-举个栗子"><a href="#3-举个栗子" class="headerlink" title="3. 举个栗子"></a>3. 举个栗子</h3><p><img src="http://ww4.sinaimg.cn/large/0060lm7Tly1fopggo3xwzj30mu0p7n27.jpg" alt="班车系统E-R图"><br>项目涉及到的主要是用户、班车、站点、活动类型这4个实体，下面将逐个一一介绍：</p>
+<ol>
+<li>用户类型<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const ActivityTypeSchema = new Schema(&#123;</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    unique: true,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>此处描述的是仅有一个唯一键的字段name。由于MongoDB本身自带id属性，所以可以不考虑自己添加id字段。</p>
+<ol>
+<li>站点<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">const StationSchema = new Schema(&#123;</span><br><span class="line">  comment: String,</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    trim: true,</span><br><span class="line">    index: true,</span><br><span class="line">    required: true,</span><br><span class="line">  &#125;,</span><br><span class="line">  longitude: &#123;</span><br><span class="line">    type: Number,</span><br><span class="line">    required: true,</span><br><span class="line">  &#125;,</span><br><span class="line">  latitude: &#123;</span><br><span class="line">    type: Number,</span><br><span class="line">    required: true,</span><br><span class="line">  &#125;,</span><br><span class="line">  bus: [Schema.Types.ObjectId],</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">StationSchema.virtual(&apos;longlat&apos;).get(function() &#123;</span><br><span class="line">  return `$&#123;this.longitude&#125;$&#123;sperator&#125;$&#123;this.latitude&#125;`;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">StationSchema.virtual(&apos;longlat&apos;).set(function(value) &#123;</span><br><span class="line">  var parts = value.split(sperator);</span><br><span class="line">  if(parts.length === 2) &#123;</span><br><span class="line">    this.longitude = parts[0];</span><br><span class="line">    this.latitude = parts[1];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>这里有四个属性，同时还有一个虚拟属性longlat，用于更方便的同时读取以及写入经纬度的两个属性。bus为一个数组，表示的是站点所属的班车线路，内部存放的是bus的id。</p>
+<ol>
+<li>用户<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">const UserSchema = new Schema(&#123;</span><br><span class="line">  account: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">  &#125;,</span><br><span class="line">  name: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    trim: true,</span><br><span class="line">    required: true,</span><br><span class="line">  &#125;,</span><br><span class="line">  email: String,</span><br><span class="line">  phone: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">  &#125;,</span><br><span class="line">  residence: StationSchema,</span><br><span class="line">  familyMemberNums: [&#123;</span><br><span class="line">    bus: Schema.Types.ObjectId,</span><br><span class="line">    familyMemberNum: &#123;</span><br><span class="line">      type: Number,</span><br><span class="line">      min: 0,</span><br><span class="line">      default: 0,</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;],</span><br><span class="line">  bus: [&#123;</span><br><span class="line">    station: StationSchema,</span><br><span class="line">    frequency: &#123;</span><br><span class="line">      type: Number,</span><br><span class="line">      min: 1,</span><br><span class="line">    &#125;,</span><br><span class="line">    commutingType: String,</span><br><span class="line">    // 班次</span><br><span class="line">    bus: Schema.Types.ObjectId,</span><br><span class="line">  &#125;],</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>residence其中内嵌了一个站点的子文档，familyMemberNums表示某位用户在某个线路上带家属的个数，bus也是一个数组，包括了上车的站点以及所在的班车路线。</p>
+<ol>
+<li>班车<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">const BusSchema = new Schema(&#123;</span><br><span class="line">  // 编号</span><br><span class="line">  identifier: &#123;</span><br><span class="line">    type: String,</span><br><span class="line">    trim: true,</span><br><span class="line">    required: isCommutingBus,</span><br><span class="line">  &#125;,</span><br><span class="line">  activityType: &#123;</span><br><span class="line">    type: Schema.Types.ObjectId,</span><br><span class="line">    ref: &apos;ActivityType&apos;,</span><br><span class="line">  &#125;,</span><br><span class="line">  enrollStartTime: Date,</span><br><span class="line">  enrollEndTime: &#123;</span><br><span class="line">    type: Date,</span><br><span class="line">    validate: function(value) &#123;</span><br><span class="line">      return value &gt;= this.enrollStartTime;</span><br><span class="line">    &#125;,</span><br><span class="line">  &#125;,</span><br><span class="line">  route: [StationSchema],</span><br><span class="line">  users: [UserSchema],</span><br><span class="line">  // 通勤类型，早/晚班车</span><br><span class="line">  commutingType: &#123;</span><br><span class="line">    required: isCommutingBus,</span><br><span class="line">    type: String,</span><br><span class="line">    trim: true,</span><br><span class="line">    enum: [&apos;morning&apos;, &apos;evening&apos;],</span><br><span class="line">  &#125;,</span><br><span class="line">  topLimit: &#123;</span><br><span class="line">    required: function(value) &#123;</span><br><span class="line">      // 类型为通勤时必填</span><br><span class="line">      return this.commutingType;</span><br><span class="line">    &#125;,</span><br><span class="line">    type: Number,</span><br><span class="line">    min: 0,</span><br><span class="line">    default: 2000,</span><br><span class="line">  &#125;,</span><br><span class="line">  departureTime: &#123;</span><br><span class="line">    type: Date,</span><br><span class="line">    required: isCommutingBus,</span><br><span class="line">  &#125;,</span><br><span class="line">  licenceNum: &#123;</span><br><span class="line">    required: isCommutingBus,</span><br><span class="line">    type: String,</span><br><span class="line">    trim: true,</span><br><span class="line">    unique: true,</span><br><span class="line">    sparse: true,</span><br><span class="line">  &#125;,</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">BusSchema.virtual(&apos;enrollPeriod&apos;).get(function() &#123;</span><br><span class="line">  const startTime = getFormattedMoment(this.enrollStartTime);</span><br><span class="line">  const endTime = getFormattedMoment(this.enrollEndTime);</span><br><span class="line">  return `$&#123;startTime&#125;$&#123;sperator&#125;$&#123;endTime&#125;`;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">BusSchema.virtual(&apos;enrollPeriod&apos;).set(function(value) &#123;</span><br><span class="line">  var parts = value.split(seprator);</span><br><span class="line">  if(parts.length === 2) &#123;</span><br><span class="line">    this.enrollStartTime = parts[0];</span><br><span class="line">    this.enrollEndTime = parts[1];</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">BusSchema.virtual(&apos;enrollCount&apos;).get(function(value) &#123;</span><br><span class="line">  if(this.users) &#123;</span><br><span class="line">    const id = this.id;</span><br><span class="line">    const familys = compact(this.users.map(user =&gt; &#123;</span><br><span class="line">      const familyMemberNumObj = find(user.familyMemberNums, (num) =&gt; num.bus.equals(id));</span><br><span class="line">      return familyMemberNumObj &amp;&amp; familyMemberNumObj.familyMemberNum;</span><br><span class="line">    &#125;))</span><br><span class="line">    const familyMemberNum = (familys.length &amp;&amp; familys.reduce((prev, next) =&gt; prev + next)) || 0;</span><br><span class="line">    return this.users.length + familyMemberNum;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>acitivityType为线路所属的活动类型id，体现的是活动类型对班车的一对多关系。而route和users两个数组则分别体现了与站点以及用户的多对多关系。enrollCount则是获取到报名人以及所带家属的人数。</p>
+<h3 id="4-在框架中的组织模式"><a href="#4-在框架中的组织模式" class="headerlink" title="4. 在框架中的组织模式"></a>4. 在框架中的组织模式</h3><h4 id="Schema"><a href="#Schema" class="headerlink" title="Schema"></a>Schema</h4><p>这是一种以文件形式存储的数据库模型骨架，不具备数据库的操作能力。<br>像是上面的这些都是Schema的主要内容，在模块中只要导出Schema对象以便在之后获取model对象并集成就好。</p>
+<h4 id="获取model"><a href="#获取model" class="headerlink" title="获取model"></a>获取model</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">const db = Object.create(null);</span><br><span class="line"></span><br><span class="line">[ActivityTypeSchema, StationSchema, UserSchema, BusSchema, AnnouncementSchema, FeedbackSchema].map(schema =&gt; &#123;</span><br><span class="line">  schema.virtual(&apos;id&apos;).get(function() &#123;</span><br><span class="line">    return this._id.toHexString();</span><br><span class="line">  &#125;);</span><br><span class="line">  schema.set(&apos;toObject&apos;, &#123;</span><br><span class="line">    virtuals: true,</span><br><span class="line">  &#125;);</span><br><span class="line">  schema.set(&apos;toJSON&apos;, &#123;</span><br><span class="line">    virtuals: true,</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">db.mongoose = mongoose;</span><br><span class="line">db.Schema = mongoose.Schema;</span><br><span class="line">db.Announcement = mongoose.model(&apos;Announcement&apos;, AnnouncementSchema);</span><br><span class="line">db.Feedback = mongoose.model(&apos;Feedback&apos;, FeedbackSchema);</span><br><span class="line">db.ActivityType = mongoose.model(&apos;ActivityType&apos;, ActivityTypeSchema);</span><br><span class="line">db.Station = mongoose.model(&apos;Station&apos;, StationSchema);</span><br><span class="line">db.Bus = mongoose.model(&apos;Bus&apos;, BusSchema);</span><br><span class="line">db.User = mongoose.model(&apos;User&apos;, UserSchema);</span><br><span class="line"></span><br><span class="line">module.exports = db;</span><br></pre></td></tr></table></figure>
+<p>mongoose.model获取的是由Schema发布生成的模型，具有抽象属性和行为的数据库操作。 可以用new 关键字model的方式创建实体（Entitiy）</p>
+<h4 id="建立数据库连接"><a href="#建立数据库连接" class="headerlink" title="建立数据库连接"></a>建立数据库连接</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// mongoose support</span><br><span class="line">mongoose.connect(dbConfig.uri, dbConfig.option);</span><br><span class="line">mongoose.Promise = global.Promise;</span><br><span class="line">const db = mongoose.connection;</span><br><span class="line">db.on(&apos;error&apos;, console.error.bind(console, &apos;MongoDB connection error:&apos;));</span><br></pre></td></tr></table></figure>
+<p>在app.js中连接数据库，并用ES6的Promise替换mongoose中原有的A+的Promise实现。最后，监听报错信息，若有报错则打印错误。</p>
+<h3 id="5-Mongoose的一些坑"><a href="#5-Mongoose的一些坑" class="headerlink" title="5. Mongoose的一些坑"></a>5. Mongoose的一些坑</h3><h4 id="虚拟属性"><a href="#虚拟属性" class="headerlink" title="虚拟属性"></a>虚拟属性</h4><p>虚拟属性本身算是mongoose自带的特性，MongoDB中并没有对应的支持，对注册虚拟属性的文档本身的属性读取十分方便，但在子文档中就不是这样了。在github上的issue中似乎提到已经fix这个问题但在5.0.2rc下似乎仍存在这个问题。像是上面提及的id以及enrollCount这样的虚拟属性，在子文档中就无法获取到。</p>
+<h4 id="无事务支持"><a href="#无事务支持" class="headerlink" title="无事务支持"></a>无事务支持</h4><p>MongoDB这种NoSQL对数据一致性的支持不大好，主要表现在不支持关系型数据库中常见的事务功能。在使用mongoose时，很可能发生报错位置上的Promise中的then部分已经执行了，并且在报错后不会回滚。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">enroll(req, resp, next) &#123;</span><br><span class="line">  const userName = req.session.user.userName;</span><br><span class="line">  const getBus = db.Bus.findById(req.body.busId);</span><br><span class="line">  getBus.then(bus =&gt; &#123;</span><br><span class="line">    if(bus.activityType) &#123;</span><br><span class="line">      return Promise.all([db.Bus.find(&#123;</span><br><span class="line">        activityType: bus.activityType,</span><br><span class="line">      &#125;), bus]);</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">      // 报名通勤班车的情况</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).then(([buses, targetBus]) =&gt; &#123;</span><br><span class="line">    const getUser = db.User.findOne(&#123; account: userName&#125;);</span><br><span class="line">    const getStation= db.Station.findById(req.body.stationId);</span><br><span class="line">    if(findIndex(buses, bus =&gt; findIndex(bus.users, [&apos;account&apos;, userName]) &gt;=0) &gt;=0) &#123;</span><br><span class="line">      resp.failed(&apos;您已在同活动类型下的其它班次报名过！请先取消报名&apos;);</span><br><span class="line">    &#125;else if(req.body.stationId)&#123;</span><br><span class="line">      return Promise.all([getUser, getStation, targetBus]);</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">      resp.failed(&apos;报名站点是必须的！&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).then(([user, station, bus]) =&gt; &#123;</span><br><span class="line">    if(bus &amp;&amp; user &amp;&amp; station &amp;&amp; bus.enrollCount &lt; bus.topLimit) &#123;</span><br><span class="line">      // user.bus里没有当前bus,bus.users也没有当前用户</span><br><span class="line">      if(findIndex(user.bus, enrolledBus =&gt; enrolledBus.bus.equals(bus.id)) &lt; 0 &amp;&amp; findIndex(bus.users, [&apos;account&apos;, userName] &lt; 0)) &#123;</span><br><span class="line">        user.bus.push(&#123;</span><br><span class="line">          station: station,</span><br><span class="line">          bus: bus.id,</span><br><span class="line">        &#125;);</span><br><span class="line">        user.familyMemberNums.push(&#123; bus: bus.id, familyMemberNum: req.body.familyMemberNum &#125;);</span><br><span class="line">        bus.users.push(user);</span><br><span class="line">        return Promise.all([user.save(), bus.save()]);</span><br><span class="line">      &#125;else &#123;</span><br><span class="line">        resp.failed(&apos;报名失败,可能已经报名过&apos;);</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;else &#123;</span><br><span class="line">      resp.failed(&apos;当前报名人数已满&apos;);</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;).then(() =&gt; &#123;</span><br><span class="line">    resp.success(SUCCESS);</span><br><span class="line">  &#125;).catch(next);</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure></p>
+<p>这里把之前Promise中获取到的targetBus对象，在最后一个Promise中和用户对象一起储存。而若是bus对象在之前的Promise中进行保存，那么假如user对象保存这一Promise失败的话，bus对象也已在之前的Promise中保存进数据库了，并且不能回退。把user和bus这样的有对数据库内容进行操作的步骤集中在一个Promise来完成，这样在某个Promise失败时也能确保另一个对数据库操作没有成功执行，在编码上实现了回退功能。</p>
+<h4 id="数据聚合"><a href="#数据聚合" class="headerlink" title="数据聚合"></a>数据聚合</h4><p>实际上是MongoDB自带的高级特性，mongoose中只是简单的封装了，在计算分页时比较方便，但是享受不到mongoose中虚拟属性的支持。</p>
+<h4 id="查询"><a href="#查询" class="headerlink" title="查询"></a>查询</h4><ol>
+<li>ID判等的时候使用equals方法。<br><code>enrolledBus.bus.equals(bus.id))</code></li>
+<li>使用findById方法时必须传入id(id 不能为undefined)，而在使用find方法通过id进行检索时，可以是undefined。</li>
+</ol>
+<h4 id="唯一键"><a href="#唯一键" class="headerlink" title="唯一键"></a>唯一键</h4><p>设置属性<code>unique:true</code>时，添加<code>sparse:true</code>来防止空值重复。像是上面提到的班车线路的model中licenseNum车牌号属性，在设置了唯一键的情况、但不设置<code>sparse:true</code>的情况，第一个没有licenseNum的班车线路可以正常保存，但在插入第二个没有车牌号的班车路线对象时则会提示，licenseNum为null重复。在加了<code>sparse:true</code>后无此问题。</p>
+<h3 id="6-在公司网络环境下MongoDB的一些坑"><a href="#6-在公司网络环境下MongoDB的一些坑" class="headerlink" title="6. 在公司网络环境下MongoDB的一些坑"></a>6. 在公司网络环境下MongoDB的一些坑</h3><h4 id="版本"><a href="#版本" class="headerlink" title="版本"></a>版本</h4><p>公司稳定版本3.4.2。奇数号版本是开发版本（比如3.5）。版本号不符合可能会收到来自安全产品部同事的请喝茶( ^‐^)_~~</p>
+<h4 id="绑定ip配置"><a href="#绑定ip配置" class="headerlink" title="绑定ip配置"></a>绑定ip配置</h4><p>默认bindIP设置为127.0.0.1，即仅允许来自本地的数据库连接，web应用与数据库不在同一主机上的话，可以修改bindIP为0.0.0.0，即允许来自任何ip的数据库连接请求。</p>
+<h4 id="用户认证配置"><a href="#用户认证配置" class="headerlink" title="用户认证配置"></a>用户认证配置</h4><p>先将需要连接数据库用户在需要操作的数据库上创建，并赋予读写权限。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Authentication: </span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure></p>
+<p>然后在配置文件中添加以上认证配置。之后即可通过用户密码建立对数据库的连接。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/es6-commonly-features/" rel="next" title="es6常用特性">
+                <i class="fa fa-chevron-left"></i> es6常用特性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MongoDB相关分享"><span class="nav-number">1.</span> <span class="nav-text">MongoDB相关分享</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#以班车系统为例"><span class="nav-number">1.1.</span> <span class="nav-text">以班车系统为例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-文档型数据库MongoDB"><span class="nav-number">1.1.1.</span> <span class="nav-text">1. 文档型数据库MongoDB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-与关系型数据库范式设计上的区别"><span class="nav-number">1.1.2.</span> <span class="nav-text">2. 与关系型数据库范式设计上的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#一对一关系"><span class="nav-number">1.1.2.1.</span> <span class="nav-text">一对一关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一对多关系"><span class="nav-number">1.1.2.2.</span> <span class="nav-text">一对多关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#多对多关系"><span class="nav-number">1.1.2.3.</span> <span class="nav-text">多对多关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-举个栗子"><span class="nav-number">1.1.3.</span> <span class="nav-text">3. 举个栗子</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-在框架中的组织模式"><span class="nav-number">1.1.4.</span> <span class="nav-text">4. 在框架中的组织模式</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Schema"><span class="nav-number">1.1.4.1.</span> <span class="nav-text">Schema</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#获取model"><span class="nav-number">1.1.4.2.</span> <span class="nav-text">获取model</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#建立数据库连接"><span class="nav-number">1.1.4.3.</span> <span class="nav-text">建立数据库连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-Mongoose的一些坑"><span class="nav-number">1.1.5.</span> <span class="nav-text">5. Mongoose的一些坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#虚拟属性"><span class="nav-number">1.1.5.1.</span> <span class="nav-text">虚拟属性</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#无事务支持"><span class="nav-number">1.1.5.2.</span> <span class="nav-text">无事务支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#数据聚合"><span class="nav-number">1.1.5.3.</span> <span class="nav-text">数据聚合</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询"><span class="nav-number">1.1.5.4.</span> <span class="nav-text">查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#唯一键"><span class="nav-number">1.1.5.5.</span> <span class="nav-text">唯一键</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-在公司网络环境下MongoDB的一些坑"><span class="nav-number">1.1.6.</span> <span class="nav-text">6. 在公司网络环境下MongoDB的一些坑</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#版本"><span class="nav-number">1.1.6.1.</span> <span class="nav-text">版本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#绑定ip配置"><span class="nav-number">1.1.6.2.</span> <span class="nav-text">绑定ip配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#用户认证配置"><span class="nav-number">1.1.6.3.</span> <span class="nav-text">用户认证配置</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

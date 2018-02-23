@@ -1,0 +1,708 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="es6," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="1、解构赋值1.1、定义&amp;ensp;&amp;ensp;什么是解构赋值？ &amp;ensp;&amp;ensp;ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。这种赋值语法极度简洁，同时还比传统的属性访问方法更为清晰。 &amp;ensp;&amp;ensp;其中包括：数组，对象的解构赋值，字符串的解构赋值，函数参数的解构赋值 1.2、数组解构1234567891011let">
+<meta name="keywords" content="es6">
+<meta property="og:type" content="article">
+<meta property="og:title" content="es6常用特性">
+<meta property="og:url" content="https://wsfe.github.io/2017/12/es6-commonly-features/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="1、解构赋值1.1、定义&amp;ensp;&amp;ensp;什么是解构赋值？ &amp;ensp;&amp;ensp;ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。这种赋值语法极度简洁，同时还比传统的属性访问方法更为清晰。 &amp;ensp;&amp;ensp;其中包括：数组，对象的解构赋值，字符串的解构赋值，函数参数的解构赋值 1.2、数组解构1234567891011let">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-22T03:38:44.147Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="es6常用特性">
+<meta name="twitter:description" content="1、解构赋值1.1、定义&amp;ensp;&amp;ensp;什么是解构赋值？ &amp;ensp;&amp;ensp;ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。这种赋值语法极度简洁，同时还比传统的属性访问方法更为清晰。 &amp;ensp;&amp;ensp;其中包括：数组，对象的解构赋值，字符串的解构赋值，函数参数的解构赋值 1.2、数组解构1234567891011let">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2017/12/es6-commonly-features/"/>
+
+
+
+
+
+  <title>es6常用特性 | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2017/12/es6-commonly-features/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">es6常用特性</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-12T10:28:24+08:00">
+                2017-12-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1、解构赋值"><a href="#1、解构赋值" class="headerlink" title="1、解构赋值"></a>1、解构赋值</h2><h3 id="1-1、定义"><a href="#1-1、定义" class="headerlink" title="1.1、定义"></a>1.1、定义</h3><p>&ensp;&ensp;什么是解构赋值？</p>
+<p>&ensp;&ensp;ES6 允许按照一定模式，从数组和对象中提取值，对变量进行赋值，这被称为解构（Destructuring）。这种赋值语法极度简洁，同时还比传统的属性访问方法更为清晰。</p>
+<p>&ensp;&ensp;其中包括：数组，对象的解构赋值，字符串的解构赋值，函数参数的解构赋值</p>
+<h3 id="1-2、数组解构"><a href="#1-2、数组解构" class="headerlink" title="1.2、数组解构"></a>1.2、数组解构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span>  test=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">//es5</span></span><br><span class="line"><span class="keyword">let</span> first = test[<span class="number">0</span>];</span><br><span class="line"><span class="keyword">let</span> second = test[<span class="number">1</span>];</span><br><span class="line"><span class="keyword">let</span> third = test[<span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="comment">//es6</span></span><br><span class="line"> <span class="keyword">let</span> [first, , third] = test</span><br><span class="line"> <span class="comment">//fist//1</span></span><br><span class="line"> <span class="comment">//second//undefined</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-3、对象解构"><a href="#1-3、对象解构" class="headerlink" title="1.3、对象解构"></a>1.3、对象解构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> obj=&#123; <span class="attr">foo</span>: <span class="string">"a"</span>, <span class="attr">bar</span>: <span class="string">"b"</span> &#125;;</span><br><span class="line"><span class="comment">//es5</span></span><br><span class="line"><span class="keyword">let</span> foo= obj.foo;</span><br><span class="line"><span class="keyword">let</span> bar= obj.bar;</span><br><span class="line"><span class="comment">//es6</span></span><br><span class="line"><span class="keyword">let</span> &#123; foo, bar &#125; = obj;</span><br><span class="line"><span class="comment">//foo // "a"</span></span><br><span class="line"><span class="comment">//bar // "b"</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-4、字符解构"><a href="#1-4、字符解构" class="headerlink" title="1.4、字符解构"></a>1.4、字符解构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [a, b, c, d, e] = <span class="string">'hello'</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"d:"</span>, d);<span class="comment">//l</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; length &#125; = <span class="string">"string"</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"length:"</span>, length);<span class="comment">//6</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-5、函数解构"><a href="#1-5、函数解构" class="headerlink" title="1.5、函数解构"></a>1.5、函数解构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//es5</span></span><br><span class="line"><span class="keyword">var</span> arr = [<span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test</span>(<span class="params">a, b</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"a:"</span> + a);<span class="comment">//1</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"b:"</span> + b);<span class="comment">//2</span></span><br><span class="line">&#125;</span><br><span class="line">test(arr[<span class="number">0</span>], arr[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line"><span class="comment">//es6</span></span><br><span class="line"><span class="keyword">var</span> arr1 = [<span class="number">11</span>, <span class="number">22</span>];</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test1</span>(<span class="params">[a, b]</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"a:"</span> + a);<span class="comment">//11</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"b:"</span> + b);<span class="comment">//22</span></span><br><span class="line">&#125;</span><br><span class="line">test1(arr1);</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> obj = &#123; <span class="attr">b</span>: <span class="number">33</span>, <span class="attr">a</span>: <span class="number">44</span> &#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">test2</span>(<span class="params">&#123; a, b &#125;</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"a:"</span> + a);<span class="comment">//33</span></span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">"b:"</span> + b);<span class="comment">//44</span></span><br><span class="line">&#125;</span><br><span class="line">test2(obj);</span><br><span class="line"></span><br><span class="line"><span class="comment">//用法：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> &#123; floor, pow &#125; = <span class="built_in">Math</span>;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">"a"</span> + pow(<span class="number">3</span>, <span class="number">3</span>));<span class="comment">//9</span></span><br><span class="line"><span class="comment">// 引入库</span></span><br><span class="line"><span class="keyword">const</span> &#123;toNumber,trim&#125; = <span class="built_in">require</span>(<span class="string">'lodash'</span>);</span><br></pre></td></tr></table></figure>
+<h2 id="2、运算符（…）"><a href="#2、运算符（…）" class="headerlink" title="2、运算符（…）"></a>2、运算符（…）</h2><h3 id="2-1、定义"><a href="#2-1、定义" class="headerlink" title="2.1、定义"></a>2.1、定义</h3><p>&ensp;&ensp;（…）用于把一个数组转化为用逗号分隔的参数序列，它常用在不定参数个数时的函数调用，数组合并,替代es5的apply方法，与解构赋值结合，生成新数组等情形。</p>
+<h3 id="2-2、可变参数个数的函数调用"><a href="#2-2、可变参数个数的函数调用" class="headerlink" title="2.2、可变参数个数的函数调用"></a>2.2、可变参数个数的函数调用</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">...vals</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> sum = <span class="number">0</span>;</span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; vals.length; i++) &#123;</span><br><span class="line">    sum += vals[i];</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> test = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>];</span><br><span class="line"><span class="keyword">let</span> sum = add(...test);<span class="comment">//15</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-3、便捷的数组合并"><a href="#2-3、便捷的数组合并" class="headerlink" title="2.3、便捷的数组合并"></a>2.3、便捷的数组合并</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> arr1 = [<span class="number">1</span>,<span class="number">2</span>];</span><br><span class="line"><span class="keyword">let</span> arr2 = [<span class="number">5</span>,<span class="number">6</span>];</span><br><span class="line"><span class="keyword">let</span> newArr = [<span class="number">20</span>];</span><br><span class="line"><span class="comment">//es5</span></span><br><span class="line">newArr = newArr.concat(arr1).concat(arr2); <span class="comment">//[20,1,2,5,6]</span></span><br><span class="line"><span class="comment">//es6</span></span><br><span class="line">newArr = [<span class="number">20</span>,...arr1,...arr2];  <span class="comment">//[20,1,2,5,6]</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-4、替代es5的apply方法"><a href="#2-4、替代es5的apply方法" class="headerlink" title="2.4、替代es5的apply方法"></a>2.4、替代es5的apply方法</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//ES5</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">f</span>(<span class="params">x, y, z</span>) </span>&#123;&#125;</span><br><span class="line"><span class="keyword">var</span> args = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">f.apply(<span class="literal">null</span>, args);</span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line"><span class="keyword">let</span> args = [<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>];</span><br><span class="line">f(...args);</span><br><span class="line"></span><br><span class="line"><span class="comment">//ES5</span></span><br><span class="line"><span class="built_in">Math</span>.max.apply(<span class="literal">null</span>, [<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>])</span><br><span class="line"><span class="comment">// ES6</span></span><br><span class="line"><span class="built_in">Math</span>.max(...[<span class="number">14</span>, <span class="number">3</span>, <span class="number">77</span>])</span><br><span class="line"><span class="comment">//等同于Math.max(14, 3, 77);</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-5、与解构赋值结合，生成新数组"><a href="#2-5、与解构赋值结合，生成新数组" class="headerlink" title="2.5、与解构赋值结合，生成新数组"></a>2.5、与解构赋值结合，生成新数组</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> [first, ...rest] = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>];</span><br><span class="line"><span class="comment">//first // 1</span></span><br><span class="line"><span class="comment">//rest // [2, 3]</span></span><br></pre></td></tr></table></figure>
+<h2 id="3、箭头函数"><a href="#3、箭头函数" class="headerlink" title="3、箭头函数"></a>3、箭头函数</h2><h3 id="3-1、定义"><a href="#3-1、定义" class="headerlink" title="3.1、定义"></a>3.1、定义</h3><p>&ensp;&ensp;es6使用“箭头”（=&gt;）定义函数。</p>
+<p>&ensp;&ensp;箭头函数（arrow function），使用的频率非常的高，写法也是非常的简洁和清晰！</p>
+<h3 id="3-2、简化回调函数"><a href="#3-2、简化回调函数" class="headerlink" title="3.2、简化回调函数"></a>3.2、简化回调函数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].map(<span class="function"><span class="keyword">function</span> (<span class="params">x</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x * x;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// es6</span></span><br><span class="line">[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>].map(<span class="function"><span class="params">x</span> =&gt;</span> x * x);</span><br><span class="line"><span class="keyword">const</span> test = <span class="function">(<span class="params">head, ...tail</span>) =&gt;</span> [head, tail];</span><br><span class="line">test(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)<span class="comment">// [1,[2,3,4,5]]</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//箭头函数取代Function.prototype.bind，不应再用self/_this/that绑定 this</span></span><br><span class="line"><span class="comment">//es5</span></span><br><span class="line"><span class="keyword">const</span> self = <span class="keyword">this</span>;</span><br><span class="line"><span class="keyword">const</span> boundMethod = <span class="function"><span class="keyword">function</span>(<span class="params">...params</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> method.apply(self, params);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// es6</span></span><br><span class="line"><span class="keyword">const</span> boundMethod = <span class="function">(<span class="params">...params</span>) =&gt;</span> method.apply(<span class="keyword">this</span>, params);</span><br></pre></td></tr></table></figure>
+<h2 id="4、箭头函数"><a href="#4、箭头函数" class="headerlink" title="4、箭头函数"></a>4、箭头函数</h2><h3 id="4-1、定义"><a href="#4-1、定义" class="headerlink" title="4.1、定义"></a>4.1、定义</h3><p>&ensp;&ensp;模板字符串（template string）是增强版的字符串，用反引号（`）标识。它可以当作普通字符串使用，也可以用来定义多行字符串，或者在字符串中嵌入变量，可多重嵌套。</p>
+<h3 id="4-2、简化回调函数"><a href="#4-2、简化回调函数" class="headerlink" title="4.2、简化回调函数"></a>4.2、简化回调函数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//es5</span></span><br><span class="line"><span class="keyword">let</span> title = <span class="string">"hello world!"</span></span><br><span class="line"><span class="keyword">var</span> tpl = <span class="string">'&lt;div&gt;'</span> +</span><br><span class="line">  <span class="string">'&lt;span&gt;'</span> + title + <span class="string">'&lt;/span&gt;'</span> +</span><br><span class="line">  <span class="string">'&lt;/div&gt;'</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">//es6</span></span><br><span class="line"><span class="keyword">let</span> tpl2 = <span class="string">`&lt;div&gt;</span></span><br><span class="line"><span class="string">	&lt;span&gt;<span class="subst">$&#123;title&#125;</span>&lt;/span&gt;</span></span><br><span class="line"><span class="string">&lt;/div&gt;`</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> tpl3 = <span class="string">`&lt;div&gt;</span></span><br><span class="line"><span class="string">	&lt;span&gt;<span class="subst">$&#123;title+<span class="string">`</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">	    &lt;span&gt;<span class="subst">$&#123;title&#125;</span> 2016&lt;/span&gt;</span></span></span></span><br><span class="line"><span class="string"><span class="subst"><span class="string">	`</span>&#125;</span>&lt;/span&gt;</span></span><br><span class="line"><span class="string">&lt;/div&gt;`</span>;</span><br></pre></td></tr></table></figure>
+<h2 id="5、export-import"><a href="#5、export-import" class="headerlink" title="5、export, import"></a>5、export, import</h2><h3 id="5-1、定义"><a href="#5-1、定义" class="headerlink" title="5.1、定义"></a>5.1、定义</h3><p>&ensp;&ensp;使用import取代require。<br>&ensp;&ensp;使用export取代module.exports。</p>
+<h3 id="5-2、简化回调函数"><a href="#5-2、简化回调函数" class="headerlink" title="5.2、简化回调函数"></a>5.2、简化回调函数</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//es5</span></span><br><span class="line"><span class="keyword">const</span> moduleA = <span class="built_in">require</span>(<span class="string">'moduleA'</span>);</span><br><span class="line"><span class="keyword">const</span> func1 = moduleA.func1;</span><br><span class="line"><span class="keyword">const</span> func2 = moduleA.func2;</span><br><span class="line"></span><br><span class="line"><span class="comment">// es6</span></span><br><span class="line"><span class="keyword">import</span> &#123; func1, func2 &#125; <span class="keyword">from</span> <span class="string">'moduleA'</span>; <span class="comment">//对象解构</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// commonJS的写法</span></span><br><span class="line"><span class="keyword">const</span> commons = &#123;</span><br><span class="line">  SUCCESS: <span class="string">'请求成功'</span>,</span><br><span class="line">  FAILED: <span class="string">'请求失败'</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = commons;</span><br><span class="line"></span><br><span class="line"><span class="comment">// ES6的写法</span></span><br><span class="line"><span class="keyword">const</span> commons = &#123;</span><br><span class="line">  SUCCESS: <span class="string">'请求成功'</span>,</span><br><span class="line">  FAILED: <span class="string">'请求失败'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> commons</span><br></pre></td></tr></table></figure>
+<h2 id="6、for-…-of"><a href="#6、for-…-of" class="headerlink" title="6、for … of"></a>6、for … of</h2><h3 id="6-1、定义"><a href="#6-1、定义" class="headerlink" title="6.1、定义"></a>6.1、定义</h3><p>&ensp;&ensp;for…of循环，可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如arguments对象、DOM NodeList 对象）、Generator 对象，以及字符串。</p>
+<h3 id="6-2、遍历数组"><a href="#6-2、遍历数组" class="headerlink" title="6.2、遍历数组"></a>6.2、遍历数组</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> arr = [<span class="string">'red'</span>, <span class="string">'green'</span>, <span class="string">'blue'</span>];</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> v <span class="keyword">of</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(v); <span class="comment">// red green blue</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 对比for-in和for-of：</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> k <span class="keyword">in</span> arr) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(k);</span><br><span class="line">&#125; <span class="comment">// 0 1 2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> engines = <span class="keyword">new</span> <span class="built_in">Set</span>([<span class="string">"Gecko"</span>, <span class="string">"Webkit"</span>, <span class="string">"Webkit"</span>]);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> e <span class="keyword">of</span> engines) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(e);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Gecko</span></span><br><span class="line"><span class="comment">// Webkit</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> es6 = <span class="keyword">new</span> <span class="built_in">Map</span>();</span><br><span class="line">es6.set(<span class="string">"edition"</span>, <span class="number">6</span>);</span><br><span class="line">es6.set(<span class="string">"standard"</span>, <span class="string">"ECMA-262"</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">var</span> [name, value] <span class="keyword">of</span> es6) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(name + <span class="string">": "</span> + value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//edition: 6</span></span><br><span class="line"><span class="comment">//standard: ECMA-262</span></span><br></pre></td></tr></table></figure>
+<h3 id="6-3、遍历Set-和-Map-结构"><a href="#6-3、遍历Set-和-Map-结构" class="headerlink" title="6.3、遍历Set 和 Map 结构"></a>6.3、遍历Set 和 Map 结构</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> map = <span class="keyword">new</span> <span class="built_in">Map</span>().set(<span class="string">'a'</span>, <span class="number">1</span>).set(<span class="string">'b'</span>, <span class="number">2</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> pair <span class="keyword">of</span> map) &#123;</span><br><span class="line">  <span class="built_in">console</span>.log(pair);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// ['a', 1]</span></span><br><span class="line"><span class="comment">// ['b', 2]</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">let</span> [key, value] <span class="keyword">of</span> map) &#123;  <span class="comment">//数组解构</span></span><br><span class="line">  <span class="built_in">console</span>.log(key + <span class="string">' : '</span> + value);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//a : 1</span></span><br><span class="line"><span class="comment">//b : 2</span></span><br></pre></td></tr></table></figure>
+<h2 id="7、es6代码片段示例："><a href="#7、es6代码片段示例：" class="headerlink" title="7、es6代码片段示例："></a>7、es6代码片段示例：</h2> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"> <span class="keyword">const</span> moment = <span class="built_in">require</span>(<span class="string">'moment'</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; pathConfig &#125; = <span class="built_in">require</span>(<span class="string">'../config'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> formatDate = <span class="function">(<span class="params">date</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> moment(date).format(<span class="string">'YYYY-MM-DD HH:mm'</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getPath =  <span class="function">(<span class="params">picture</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> pathParse = path.parse(picture.path);</span><br><span class="line">  <span class="keyword">return</span> <span class="string">`<span class="subst">$&#123;pathConfig.PIC_DIR&#125;</span><span class="subst">$&#123;pathParse.dir&#125;</span>/<span class="subst">$&#123;picture.name&#125;</span>_<span class="subst">$&#123;pathParse.ext&#125;</span>`</span>;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> assignPicture = <span class="function">(<span class="params">picture</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> plain = picture.get(&#123; <span class="attr">plain</span>: <span class="literal">true</span>&#125;);</span><br><span class="line">  <span class="keyword">const</span> path = getPath(plain);</span><br><span class="line">  <span class="keyword">return</span> assignIn(plain, &#123;</span><br><span class="line">    path: path,</span><br><span class="line">    created_at: formatDate(picture.created_at),</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">const</span> getResult = <span class="function">(<span class="params">pictureRs</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> assignedResultRows = pictureRs.rows.map(assignPicture);</span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    count: pictureRs.count,</span><br><span class="line">    rows: assignedResultRows,</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="8、小结"><a href="#8、小结" class="headerlink" title="8、小结"></a>8、小结</h2><p>&ensp;&ensp;以上是平时用得比较多的内容，这些语法、新增类型、模块调用等从代码量上、可读性上、操作上给项目带来了不少便利。</p>
+<p>&ensp;&ensp;随着es6的普及，这些高级语言的特性让写js也越来越顺畅。</p>
+<h2 id="9、参考资料"><a href="#9、参考资料" class="headerlink" title="9、参考资料"></a>9、参考资料</h2> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span>ECMAScript <span class="number">6</span> 入门http:<span class="comment">//es6.ruanyifeng.com/</span></span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> ES6 扩展运算符 三个点（...）</span><br><span class="line">http:<span class="comment">//www.jianshu.com/p/86cbabeda999</span></span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> es6的常用语法和优越性https:<span class="comment">//juejin.im/post/5a08e5c55188252abc5dd96f#heading-2</span></span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> ES6的一些常用特性</span><br><span class="line">https:<span class="comment">//www.cnblogs.com/MuYunyun/p/6235325.html#_label6</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/es6/" rel="tag"># es6</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/vue-virtual-dom/" rel="next" title="vue虚拟dom">
+                <i class="fa fa-chevron-left"></i> vue虚拟dom
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/02/mongodb相关分享——以班车系统为例/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1、解构赋值"><span class="nav-number">1.</span> <span class="nav-text">1、解构赋值</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1、定义"><span class="nav-number">1.1.</span> <span class="nav-text">1.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2、数组解构"><span class="nav-number">1.2.</span> <span class="nav-text">1.2、数组解构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3、对象解构"><span class="nav-number">1.3.</span> <span class="nav-text">1.3、对象解构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4、字符解构"><span class="nav-number">1.4.</span> <span class="nav-text">1.4、字符解构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-5、函数解构"><span class="nav-number">1.5.</span> <span class="nav-text">1.5、函数解构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2、运算符（…）"><span class="nav-number">2.</span> <span class="nav-text">2、运算符（…）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1、定义"><span class="nav-number">2.1.</span> <span class="nav-text">2.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2、可变参数个数的函数调用"><span class="nav-number">2.2.</span> <span class="nav-text">2.2、可变参数个数的函数调用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3、便捷的数组合并"><span class="nav-number">2.3.</span> <span class="nav-text">2.3、便捷的数组合并</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4、替代es5的apply方法"><span class="nav-number">2.4.</span> <span class="nav-text">2.4、替代es5的apply方法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5、与解构赋值结合，生成新数组"><span class="nav-number">2.5.</span> <span class="nav-text">2.5、与解构赋值结合，生成新数组</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3、箭头函数"><span class="nav-number">3.</span> <span class="nav-text">3、箭头函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1、定义"><span class="nav-number">3.1.</span> <span class="nav-text">3.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2、简化回调函数"><span class="nav-number">3.2.</span> <span class="nav-text">3.2、简化回调函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、箭头函数"><span class="nav-number">4.</span> <span class="nav-text">4、箭头函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1、定义"><span class="nav-number">4.1.</span> <span class="nav-text">4.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2、简化回调函数"><span class="nav-number">4.2.</span> <span class="nav-text">4.2、简化回调函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5、export-import"><span class="nav-number">5.</span> <span class="nav-text">5、export, import</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1、定义"><span class="nav-number">5.1.</span> <span class="nav-text">5.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2、简化回调函数"><span class="nav-number">5.2.</span> <span class="nav-text">5.2、简化回调函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6、for-…-of"><span class="nav-number">6.</span> <span class="nav-text">6、for … of</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1、定义"><span class="nav-number">6.1.</span> <span class="nav-text">6.1、定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2、遍历数组"><span class="nav-number">6.2.</span> <span class="nav-text">6.2、遍历数组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3、遍历Set-和-Map-结构"><span class="nav-number">6.3.</span> <span class="nav-text">6.3、遍历Set 和 Map 结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7、es6代码片段示例："><span class="nav-number">7.</span> <span class="nav-text">7、es6代码片段示例：</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8、小结"><span class="nav-number">8.</span> <span class="nav-text">8、小结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9、参考资料"><span class="nav-number">9.</span> <span class="nav-text">9、参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,743 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iframe,跨域," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="Iframe元素在IE浏览器横行的时代曾大量的使用，应用场景包括引入公共的导航栏、公共登陆框等一些通用的组件，一些后台管理系统也经常能看到iframe的身影。iframe元素能够创建另外一个文档的内联框架，也就是说它有独立的上下文环境，具备沙箱隔离功能。HTML规范很明确的提到过：如果你需要独立的上下文环境，那么就用iframe，如果不是，那就不要用。  虽然建议上我们应该尽量避免使用iframe">
+<meta name="keywords" content="iframe,跨域">
+<meta property="og:type" content="article">
+<meta property="og:title" content="浅谈iframe及其跨域通信">
+<meta property="og:url" content="https://wsfe.github.io/2017/09/iframe/index.html">
+<meta property="og:site_name" content="秘密前端小组">
+<meta property="og:description" content="Iframe元素在IE浏览器横行的时代曾大量的使用，应用场景包括引入公共的导航栏、公共登陆框等一些通用的组件，一些后台管理系统也经常能看到iframe的身影。iframe元素能够创建另外一个文档的内联框架，也就是说它有独立的上下文环境，具备沙箱隔离功能。HTML规范很明确的提到过：如果你需要独立的上下文环境，那么就用iframe，如果不是，那就不要用。  虽然建议上我们应该尽量避免使用iframe">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-02-22T03:38:44.148Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="浅谈iframe及其跨域通信">
+<meta name="twitter:description" content="Iframe元素在IE浏览器横行的时代曾大量的使用，应用场景包括引入公共的导航栏、公共登陆框等一些通用的组件，一些后台管理系统也经常能看到iframe的身影。iframe元素能够创建另外一个文档的内联框架，也就是说它有独立的上下文环境，具备沙箱隔离功能。HTML规范很明确的提到过：如果你需要独立的上下文环境，那么就用iframe，如果不是，那就不要用。  虽然建议上我们应该尽量避免使用iframe">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://wsfe.github.io/2017/09/iframe/"/>
+
+
+
+
+
+  <title>浅谈iframe及其跨域通信 | 秘密前端小组</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">秘密前端小组</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="https://wsfe.github.io/2017/09/iframe/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wsfe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="秘密前端小组">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">浅谈iframe及其跨域通信</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T14:16:43+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Iframe元素在IE浏览器横行的时代曾大量的使用，应用场景包括引入公共的导航栏、公共登陆框等一些通用的组件，一些后台管理系统也经常能看到iframe的身影。iframe元素能够创建另外一个文档的内联框架，也就是说它有独立的上下文环境，具备沙箱隔离功能。HTML规范很明确的提到过：如果你需要独立的上下文环境，那么就用iframe，如果不是，那就不要用。 </p>
+<p>虽然建议上我们应该尽量避免使用iframe，但是某些特殊场景下，iframe还是最好的选择。所以了解清楚iframe对于技术的选型是有帮助的。下面简单介绍下iframe的特性和目前应用的场景，当然后面会介绍最主要的iframe跨域通信。</p>
+<a id="more"></a>
+<h3 id="一、iframe的特性"><a href="#一、iframe的特性" class="headerlink" title="一、iframe的特性"></a>一、iframe的特性</h3><ul>
+<li><p>iframe会阻塞主页面的onload事件</p>
+<p>这一条很好理解，也比较容易观察到，一个空页面引入一个iframe并监听onload事件，你会发现，只有iframe里的内容加载完成，onload事件才会响应。解决方法也比较简单，就是在主页面onload后去动态创建iframe，这样就避免了阻塞主页面的加载过程。</p>
+</li>
+<li><p>iframe页面和主页面是共享浏览器的并发请求的</p>
+<p>各浏览器的并发请求连接数是有限制的，iframe页面的资源请求是和主页面共享的，这就会导致主页面加载速度被拖累。</p>
+</li>
+<li><p>iframe新开辟的独立环境所带来的内存开销更大</p>
+<p>由于需要维护独立的上下文环境，iframe带来的内存开销会增加，并且iframe容易带来内存泄漏的问题，在变更地址的时候需要做一次清空DOM然后重置到空地址的操作。</p>
+</li>
+<li><p>iframe内的页面跳转无法被浏览器记录管理</p>
+<p>这点比较好理解，也是iframe的独立沙箱的特性导致的。</p>
+</li>
+<li><p>SEO不会读取iframe里的内容</p>
+<p>SEO无法扒取iframe里的内容，当然现在iframe很少应用在页面主体框架上，即使应用了，也有技术方案可以处理SEO的问题。</p>
+</li>
+</ul>
+<h3 id="二、iframe的应用场景"><a href="#二、iframe的应用场景" class="headerlink" title="二、iframe的应用场景"></a>二、iframe的应用场景</h3><ul>
+<li><p>无刷新的文件上传</p>
+<p>在上传文件类型为multipart/form-data时较为常用。</p>
+</li>
+<li><p>所见即所得编辑器</p>
+<p>目前绝大部分所见即所得编辑器为iframe框架，因为只有这样才能够防止页面上其他样式或者JS全局变量的干扰导致编辑器无法正常运行。</p>
+</li>
+<li><p>长连接</p>
+<p>利用iframe保持长连接是实时通信的一个技术方案，具体实现大家可以百度，当然现在h5的websocket也相当成熟。不考虑兼容性的情况下，首选websocket。</p>
+</li>
+<li><p>历史记录管理</p>
+<p>富客户端应用大量的使用了ajax技术来获取数据，这就导致这种应用对于历史记录难于管理。利用iframe可以实现历史记录的管理。</p>
+</li>
+<li><p>引入第三方页面</p>
+</li>
+<li><p>在移动端应用从网页调用客户端应用</p>
+<p>这个方案比较黑科技一点，但通常只应用于安卓系统，查看下面的代码，浏览器在接收到无法识别的协议时，就会交给系统处理，系统就会调用对应的APP应用。</p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe src=<span class="string">"alipayqr://platformapi/startapp?saId=10000007&amp;clientVersion=3.7.0.0718&amp;qrcode=&#123;支付二维码扫描的url&#125;"</span> frameborder=<span class="string">"0"</span>&gt;&lt;/iframe&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="三、iframe的跨域通信"><a href="#三、iframe的跨域通信" class="headerlink" title="三、iframe的跨域通信"></a>三、iframe的跨域通信</h3><p>iframe跨域通信是这次要说明的重点。跨域是由浏览器的同源策略造成的，同源需要域名、协议、端口均相同，url地址中有任何一点不通，则会产生跨域的问题。跨域的问题会导致iframe和父页面无法通信，无法获取对方的对象。</p>
+<p>跨域分为两种情况，一是相同主域名不同的子域名，这种可以通过设置相同的document.domain来达到跨域通信的目的。还有一种是主域名不同，主域名不同并不能简单的设置document.domain来解决，下面就介绍几种针对iframe的跨域通信的解决方法。</p>
+<h4 id="1、利用hash来通信"><a href="#1、利用hash来通信" class="headerlink" title="1、利用hash来通信"></a>1、利用hash来通信</h4><p>我们先来看一个需求：假设一个a.com嵌套了一个iframe，一个意见反馈的页面，意见反馈的页面主域名为b.com，根据同源策略，主页面和子页面已经跨域。这时候如果需要在加载完意见反馈的页面后动态改变iframe的高度，就变的无法实现了。</p>
+<p>根据同源策略，要想主页面获取跨域iframe页面的高度，我们需要一个和主页面同源的中转页面内嵌在子页面里’a.com/proxy.html’。<br>这样，当子页面获取到文档高度的时候，我们把子页面内嵌的iframe地址改为’a.com/proxy.html#高度’，然后在中转页面中获取hash值，再通过parent.parent访问主页面的对象，以此来达到通信的目的。我们看下实现的代码。 </p>
+<p>a.com主页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe id=<span class="string">"frame"</span> src=<span class="string">"b.com/b.html"</span> /&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line"><span class="keyword">function</span> setHeight(h)&#123;</span><br><span class="line">  var iframe = document.getElementById(<span class="string">"frame"</span>);</span><br><span class="line">  iframe.style.height = h + <span class="string">'px'</span> ;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>b.com页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe id=<span class="string">"biframe"</span> src=<span class="string">"about:blank"</span> /&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">window.onload = <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">    var bodyheight = document.documentElement.scrollHeight;</span><br><span class="line">    document.getElementById(<span class="string">"biframe"</span>).src = <span class="string">'http://a.com/proxy.html'</span>+ <span class="string">"#"</span> + bodyheight;</span><br><span class="line">  &#125; </span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>a.com/proxy.html页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">var <span class="built_in">hash</span> = document.location.hash;</span><br><span class="line">var height = hash.replace(<span class="string">"#"</span>,<span class="string">""</span>)+<span class="string">"px"</span>;</span><br><span class="line">parent.parent.setHeight(height);</span><br><span class="line">&lt;/sciript&gt;</span><br></pre></td></tr></table></figure></p>
+<p>原理比较简单，通过中转页面的url的hash值通信。但是HASH值有一些缺点，它能容纳的长度并不长，传递的字符串有限，而且对于一些敏感数据的传输，并没有办法隐藏。同时，中转页面需要部署到主域底下，在多方合作上，也会存在一些问题。那是否有更好的方法来更新iframe的跨域通信呢？</p>
+<h4 id="2、window-name"><a href="#2、window-name" class="headerlink" title="2、window.name"></a>2、window.name</h4><p>window对象有个name属性，该属性有个特征：即在一个窗口(window)的生命周期内,窗口载入的所有的页面都是共享一个window.name的，每个同域页面对window.name都有读写的权限，window.name是持久存在一个窗口载入过的所有页面中的，并不会因新页面的载入而进行重置。window.name属性的神奇之处在于name 值在不同的页面（甚至不同域名）加载后依旧存在（如果没修改则值不会变化），并且可以支持非常长的 name 值（2MB）。</p>
+<p>那对于升级方案，我们的解决方案思路就清晰了。我们在加载完跨域页面后，把iframe的地址马上重定向到同域页面上，就能获取到子域名的值了。</p>
+<p>a.com的a页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;script&gt;</span><br><span class="line">  iframe = document.createElement(<span class="string">'iframe'</span>),</span><br><span class="line">  iframe.src = <span class="string">'http://127.0.0.1/b.html'</span>;</span><br><span class="line">  document.body.appendChild(iframe);</span><br><span class="line">  var firstload = 0;</span><br><span class="line">  iframe.onload = <span class="function"><span class="title">function</span></span>() &#123;</span><br><span class="line">    //因为更改src地址会不断触发onload事件，所以需要一个标记来判断。</span><br><span class="line">    <span class="keyword">if</span>(!firstload)&#123;</span><br><span class="line">      iframe.src = <span class="string">'about:blank'</span>; </span><br><span class="line">      //在iframe载入过程中，迅速重置iframe.src的指向，使之与index.html同源，就能获取到name值了（注意空白页面和任何域名都表示同源。）</span><br><span class="line">      alert(iframe.contentWindow.name);</span><br><span class="line">      iframe.style.height = iframe.contentWindow.name+<span class="string">'px'</span>;</span><br><span class="line">      firstload = 1;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">  &#125;;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>b.com的b页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;iframe id=<span class="string">"biframe"</span> src=<span class="string">"about:blank"</span>  frameborder=<span class="string">"0"</span>&gt;&lt;/iframe&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">window.onload = <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">  var bodyheight = document.documentElement.scrollHeight;</span><br><span class="line">  window.name = bodyheight;</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>这样iframe的跨域通信就升级了，window.name支持的数据量足够大。看似是完美的方案。但是，由于window.name并没有锁的概念，在多个iframe通信的情况下，可能会出问题。况且，window.name的变化需要页面保持轮询来监听，还是麻烦了点。那是不是有更好的解决方案呢？当然。。。</p>
+<h4 id="3、跨文档消息传送（cross-document-messaging）"><a href="#3、跨文档消息传送（cross-document-messaging）" class="headerlink" title="3、跨文档消息传送（cross-document messaging）"></a>3、跨文档消息传送（cross-document messaging）</h4><p>HTML5新的API，可在不同域之间传送消息，支持IE8+。使用方式也非常简单。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">otherWindow.postMessage(message, targetOrigin);</span><br></pre></td></tr></table></figure></p>
+<p>otherWindow: 对接收信息页面的window的引用。可以是页面中iframe的contentWindow属性；window.open的返回值；通过name或下标从window.frames取到的值。message: 所要发送的数据，string类型。targetOrigin: 用于限制otherWindow，“*”表示不作限制。然后要接受消息的页面监听一下message就可以了</p>
+<p>我们来看下例子：</p>
+<p>a.com的a页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;input <span class="built_in">type</span>=<span class="string">"text"</span> id=<span class="string">"txt"</span>&gt;&lt;button id=<span class="string">"btn"</span>&gt;发送&lt;/button&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">iframe = document.createElement(<span class="string">'iframe'</span>),</span><br><span class="line">iframe.src = <span class="string">'http://127.0.0.1/b.html'</span>;</span><br><span class="line">document.body.appendChild(iframe);</span><br><span class="line">var child = iframe.contentWindow;</span><br><span class="line">document.getElementById(<span class="string">"btn"</span>).onclick = <span class="function"><span class="title">function</span></span>()&#123;</span><br><span class="line">  child.postMessage(document.getElementById(<span class="string">"txt"</span>).value, <span class="string">"http://127.0.0.1"</span>);  </span><br><span class="line">  //targetOrigin: 用于限制接收的windows，“*”表示不作限制</span><br><span class="line">&#125;</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>b.com的b页面<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;div id=<span class="string">"info"</span>&gt;&lt;/div&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">var info = document.getElementById(<span class="string">"info"</span>);</span><br><span class="line">window.addEventListener(<span class="string">'message'</span>, <span class="keyword">function</span>(event)&#123;</span><br><span class="line">  var data = event.data;</span><br><span class="line">  var origin = event.origin;</span><br><span class="line">  var msg = document.createElement(<span class="string">"p"</span>);</span><br><span class="line">  msg.innerHTML = data;</span><br><span class="line">  info.appendChild(msg);</span><br><span class="line">&#125;, <span class="literal">false</span>);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+<p>完成，是不是很简单。postMessage兼容IE8+，如果还要再兼容低版本浏览器，就只能推荐用封装好的类库了。隆重介绍iframe跨域通信插件—MessengerJS：<br><a href="https://github.com/biqing/MessengerJS" target="_blank" rel="noopener">https://github.com/biqing/MessengerJS</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iframe/" rel="tag"># iframe</a>
+          
+            <a href="/tags/跨域/" rel="tag"># 跨域</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/front-end-template-engine/" rel="next" title="前端模板引擎">
+                <i class="fa fa-chevron-left"></i> 前端模板引擎
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/transitions&animations/" rel="prev" title="Transitions & Animations">
+                Transitions & Animations <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wsfe" />
+          <p class="site-author-name" itemprop="name">wsfe</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">15</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、iframe的特性"><span class="nav-number">1.</span> <span class="nav-text">一、iframe的特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、iframe的应用场景"><span class="nav-number">2.</span> <span class="nav-text">二、iframe的应用场景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、iframe的跨域通信"><span class="nav-number">3.</span> <span class="nav-text">三、iframe的跨域通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1、利用hash来通信"><span class="nav-number">3.1.</span> <span class="nav-text">1、利用hash来通信</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2、window-name"><span class="nav-number">3.2.</span> <span class="nav-text">2、window.name</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3、跨文档消息传送（cross-document-messaging）"><span class="nav-number">3.3.</span> <span class="nav-text">3、跨文档消息传送（cross-document messaging）</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wsfe</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+<script>
+    (function(window){
+      var bg = ['#f44336','#9c27b0','#673ab7','#3f51b5','#2196f3','#009688','#4caf50','#ffc107','#ff5722','#795548'];
+      var bgcolor = bg[Math.round(Math.random()*(bg.length-1))];
+      $(".headband,.brand,.sidebar-toggle,.back-to-top").css("background",bgcolor);
+      document.write("<style type='text/css'>::selection{background:"+ bgcolor +"}</style>");
+    }())
+</script>
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
